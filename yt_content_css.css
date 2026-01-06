@@ -1,0 +1,22 @@
+.video-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+}
+
+.video-container .grabbed-video {
+    min-width: 0%;
+    max-width: 100%;
+    flex: 1 1 auto;
+    height: fit-content !important;
+    position: relative !important;
+}
+
+.video-container .sidepanel {
+    background: red;
+    flex: 0 0 300px;
+    width: 300px;
+    height: 100% !important;
+    height: max-content;
+}
