@@ -26,32 +26,6 @@
 
 /* Sidepanel */
 
-.sidepanel {
-    height: 100%;
-    width: 300px;
-    z-index: 20;
-    background-color: gray;
-}
-
-/**
-
-.video-container {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    align-items: center;
-}
-
-.grabbed-video {
-    min-width: 0%;
-    max-width: 100%;
-    flex: 1 1 auto;
-    height: fit-content !important;
-    position: relative !important;
-    left: 0px !important;
-}
-
 .sidepanel-ctn {
     position: relative;
     display: flex;
@@ -69,7 +43,7 @@
     justify-content: center;
     align-items: center;
 
-    top: 10px;
+    top: 80px;
     height: 80px;
     width: 40px;
     background-color: var(--yt-spec-raised-background);
@@ -77,15 +51,12 @@
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
-.sidepanel-btn * {
-    pointer-events: auto;
-}
 
 .sidepanel {
     background: var(--yt-spec-raised-background);
     width: 300px;
     height: 100% !important;
     height: max-content;
+    z-index: 20;
+    transition: width 250ms ease;
 }
-
-*/
