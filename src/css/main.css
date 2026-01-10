@@ -1,0 +1,49 @@
+:root {
+    --panel-bg: ;
+}
+
+.video-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+}
+
+.video-container .grabbed-video {
+    min-width: 0%;
+    max-width: 100%;
+    flex: 1 1 auto;
+    height: fit-content !important;
+    position: relative !important;
+    left: 0px !important;
+}
+
+.video-container .sidepanel-ctn {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    z-index: 50;
+}
+
+.video-container .sidepanel-btn {
+    position: absolute; /* 🔑 */
+    left: -40px; /* pull into video */
+    z-index: 60; /* ensure above video */
+
+    top: 10px;
+    height: 80px;
+    width: 40px;
+    background-color: var(--yt-spec-raised-background);
+
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.video-container .sidepanel {
+    background: var(--yt-spec-raised-background);
+    width: 300px;
+    height: 100% !important;
+    height: max-content;
+}

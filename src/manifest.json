@@ -1,0 +1,22 @@
+{
+    "name": "Youtube Notes",
+    "description": "Take notes for videos directly on Youtube.com",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_icon": "images/icon.png"
+    },
+    "content_scripts": [
+        {
+            "js": ["webpack.bundle.js"],
+            "css": ["css/main.css"],
+            "matches": ["https://www.youtube.com/*"]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["html/sidepanel.html"],
+            "matches": ["https://www.youtube.com/*"]
+        }
+    ]
+}

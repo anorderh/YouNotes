@@ -1,5 +1,14 @@
 {
-  "dependencies": {
-    "chrome-types": "^0.1.404"
-  }
+    "scripts": {
+        "build": "webpack --config webpack.config.js"
+    },
+    "dependencies": {
+        "chrome-types": "^0.1.404"
+    },
+    "devDependencies": {
+        "@types/chrome": "^0.1.32",
+        "copy-webpack-plugin": "^13.0.1",
+        "webpack": "^5.104.1",
+        "webpack-cli": "^6.0.1"
+    }
 }
