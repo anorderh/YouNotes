@@ -25,30 +25,10 @@ export const CON = {
 };
 
 (async () => {
-    document.addEventListener(
-        'click',
-        (e) => {
-            console.log('CLICK PATH:');
-            e.composedPath().forEach((el, i) => {
-                if (el instanceof HTMLElement) {
-                    console.log(
-                        i,
-                        el.tagName,
-                        el.id ? `#${el.id}` : '',
-                        el.className ? `.${el.className}` : ''
-                    );
-                } else {
-                    console.log(i, el);
-                }
-            });
-        },
-        true
-    );
-
     // Wait until video loads to add sidepanel.
     const videoObserver = new MutationObserver(async (mutations, observe) => {
-        // FIX: Prevent re-entry, incase concurrent callbacks are scheduled.
         if (document.querySelector('.ext-container')) {
+            // FIX: Prevent re-entry, incase concurrent callbacks are scheduled.
             observe.disconnect();
             return;
         } else {
@@ -79,20 +59,48 @@ export const CON = {
                 );
                 extContainer.appendChild(sidepanelHtmlElement);
 
-                // Add open/close event.
+                // Sidepanel functionality....
                 const sidepanel = document.getElementById('sidepanel');
                 const sidepanelBtn = document.getElementById('sidepanel-btn');
+                const handle = document.querySelector('.resize-handle');
+                let isOpen = true;
+                let isResizing = false;
+
+                // Setup open/close event.
                 sidepanelBtn.addEventListener('click', (e) => {
-                    console.log('clickity');
                     if (sidepanelBtn.textContent == 'Open') {
-                        console.log('CLOSED');
+                        isOpen = false;
                         sidepanel.style.width = '0px';
                         sidepanelBtn.textContent = 'Closed';
+                        handle.style.pointerEvents = 'none';
                     } else {
-                        console.log('OPEN');
+                        isOpen = true;
                         sidepanel.style.width = '300px';
                         sidepanelBtn.textContent = 'Open';
+                        handle.style.pointerEvents = 'auto';
                     }
+                });
+
+                // Setup resize handle.
+                let startX, startWidth;
+                handle.addEventListener('mousedown', (e) => {
+                    isResizing = true;
+                    startX = e.clientX;
+                    startWidth = sidepanel.offsetWidth;
+                    document.body.style.cursor = 'ew-resize';
+                    sidepanel.classList.add('resizing');
+                    e.preventDefault();
+                });
+                document.addEventListener('mousemove', (e) => {
+                    if (!isResizing) return;
+                    const delta = startX - e.clientX; // Left handle.
+                    // const delta = e.clientX - startX; // Right handle.
+                    sidepanel.style.width = `${startWidth + delta}px`;
+                });
+                document.addEventListener('mouseup', () => {
+                    isResizing = false;
+                    document.body.style.removeProperty('cursor');
+                    sidepanel.classList.remove('resizing');
                 });
 
                 observe.disconnect();
