@@ -9,6 +9,9 @@ export const CON = {
             APPLIED_VIDEO: 'applied-video',
             SIDEPANEL: 'sidepanel',
         },
+        IDs: {
+            SIDEPANEL_ICON: 'sidepanel-icon',
+        },
     },
     YT: {
         CLASSES: {
@@ -32,6 +35,7 @@ export const CON = {
             observe.disconnect();
             return;
         } else {
+            const extContainer = document.querySelector('.ext-container');
             const video = document.querySelector(CON.YT.SELECTORS.VIDEO);
             if (video) {
                 const html5Video = getElementByClass(
@@ -62,23 +66,50 @@ export const CON = {
                 // Sidepanel functionality....
                 const sidepanel = document.getElementById('sidepanel');
                 const sidepanelBtn = document.getElementById('sidepanel-btn');
+                const sidepanelIcon = document.getElementById('sidepanel-icon');
                 const handle = document.querySelector('.resize-handle');
-                let isOpen = true;
+                let isOpen = false;
                 let isResizing = false;
 
-                // Setup open/close event.
-                sidepanelBtn.addEventListener('click', (e) => {
-                    if (sidepanelBtn.textContent == 'Open') {
-                        isOpen = false;
-                        sidepanel.style.width = '0px';
-                        sidepanelBtn.textContent = 'Closed';
-                        handle.style.pointerEvents = 'none';
-                    } else {
-                        isOpen = true;
-                        sidepanel.style.width = '300px';
-                        sidepanelBtn.textContent = 'Open';
-                        handle.style.pointerEvents = 'auto';
+                // Setup button hover.
+                const appear = () => {
+                    if (!isOpen) {
+                        sidepanelBtn.style.left = '-40px';
                     }
+                };
+                const hide = () => {
+                    if (!isOpen) {
+                        sidepanelBtn.style.left = '0px';
+                    }
+                };
+
+                // Setup open.close of sidepanel.
+                let lastWidth;
+                const close = () => {
+                    isOpen = false;
+                    lastWidth = sidepanel.getBoundingClientRect().width;
+                    sidepanel.style.width = '0px';
+                    handle.style.pointerEvents = 'none';
+                    extContainer.addEventListener('mouseenter', appear);
+                    extContainer.addEventListener('mouseleave', hide);
+                };
+                const open = () => {
+                    extContainer.removeEventListener('mouseenter', appear);
+                    extContainer.removeEventListener('mouseleave', hide);
+                    isOpen = true;
+                    const videoWidth = html5Video.getBoundingClientRect().width;
+                    const inferredWidth = videoWidth * 0.4;
+                    if (lastWidth == null || lastWidth < inferredWidth) {
+                        sidepanel.style.width = `${inferredWidth}px`;
+                    } else {
+                        sidepanel.style.width = `${lastWidth}px`;
+                    }
+                    handle.style.pointerEvents = 'auto';
+                };
+
+                isOpen ? open() : close(); // Init.
+                sidepanelBtn.addEventListener('click', (e) => {
+                    isOpen ? close() : open(); // React.
                 });
 
                 // Setup resize handle.
@@ -102,6 +133,25 @@ export const CON = {
                     document.body.style.removeProperty('cursor');
                     sidepanel.classList.remove('resizing');
                 });
+
+                // Avoid invoking YT hover for extension.
+                // Need to be careful about this, bc this is ruining other event listner impl
+                // sidepanel.addEventListener(
+                //     'mousemove',
+                //     (e) => {
+                //         sidepanel.style.cursor = 'auto';
+                //         // e.stopPropagation();
+                //     },
+                //     true
+                // );
+                // sidepanel.addEventListener(
+                //     'wheel',
+                //     (e) => {
+                //         console.log('caught');
+                //         // e.stopPropagation();
+                //     },
+                //     true
+                // );
 
                 observe.disconnect();
             }
