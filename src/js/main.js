@@ -1,5 +1,9 @@
 import sidepanelHtml from '../html/sidepanel.html';
-import { getElementByClass, loadHtmlIntoElement } from './util';
+import {
+    duringTransition,
+    getElementByClass,
+    loadHtmlIntoElement,
+} from './util';
 
 export const CON = {
     EXT: {
@@ -7,7 +11,9 @@ export const CON = {
             EXT_CONTAINER: 'ext-container',
             APPLIED_HTML5_VIDEO_CONTAINER: 'applied-html5-video-container',
             APPLIED_VIDEO: 'applied-video',
+            APPLIED_MOVIE_PLAYER: 'applied-movie-player',
             SIDEPANEL: 'sidepanel',
+            APPLIED_CHROME_BOTTOM: 'applied-ytp-chrome-bottom',
         },
         IDs: {
             SIDEPANEL_ICON: 'sidepanel-icon',
@@ -17,6 +23,7 @@ export const CON = {
         CLASSES: {
             HTML5_VIDEO_CONTAINER: 'html5-video-container',
             YTP_CHROME_TOP_BUTTONS: 'ytp-chrome-top-buttons',
+            YTP_CHROME_BOTTOM: 'ytp-chrome-bottom',
         },
         IDS: {
             MOVIE_PLAYER: 'movie_player',
@@ -38,6 +45,9 @@ export const CON = {
             const extContainer = document.querySelector('.ext-container');
             const video = document.querySelector(CON.YT.SELECTORS.VIDEO);
             if (video) {
+                const moviePlayer = document.getElementById(
+                    CON.YT.IDS.MOVIE_PLAYER
+                );
                 const html5Video = getElementByClass(
                     CON.YT.CLASSES.HTML5_VIDEO_CONTAINER
                 );
@@ -45,9 +55,10 @@ export const CON = {
                 // Create container.
                 const extContainer = document.createElement('div');
                 extContainer.className = CON.EXT.CLASSES.EXT_CONTAINER;
-                html5Video.parentNode.insertBefore(extContainer, html5Video);
+                moviePlayer.parentNode.insertBefore(extContainer, moviePlayer);
 
                 // Modify CSS of YT elements.
+                moviePlayer.classList.add(CON.EXT.CLASSES.APPLIED_MOVIE_PLAYER);
                 html5Video.classList.add(
                     CON.EXT.CLASSES.APPLIED_HTML5_VIDEO_CONTAINER
                 );
@@ -56,8 +67,8 @@ export const CON = {
                     CON.YT.CLASSES.YTP_CHROME_TOP_BUTTONS
                 ).style.pointerEvents = 'none';
 
-                // Add html5video container and sidepanel
-                extContainer.appendChild(html5Video);
+                // Add moviePlayer container and sidepanel
+                extContainer.appendChild(moviePlayer);
                 const sidepanelHtmlElement = await loadHtmlIntoElement(
                     sidepanelHtml
                 );
@@ -85,6 +96,7 @@ export const CON = {
 
                 // Setup open.close of sidepanel.
                 let lastWidth;
+                let upperLimit, lowerLimit;
                 const close = () => {
                     isOpen = false;
                     lastWidth = sidepanel.getBoundingClientRect().width;
@@ -92,19 +104,31 @@ export const CON = {
                     handle.style.pointerEvents = 'none';
                     extContainer.addEventListener('mouseenter', appear);
                     extContainer.addEventListener('mouseleave', hide);
+                    duringTransition(250, () =>
+                        window.dispatchEvent(new Event('resize'))
+                    );
                 };
                 const open = () => {
                     extContainer.removeEventListener('mouseenter', appear);
                     extContainer.removeEventListener('mouseleave', hide);
                     isOpen = true;
                     const videoWidth = html5Video.getBoundingClientRect().width;
-                    const inferredWidth = videoWidth * 0.4;
-                    if (lastWidth == null || lastWidth < inferredWidth) {
-                        sidepanel.style.width = `${inferredWidth}px`;
+                    upperLimit = videoWidth * 0.75;
+                    const target = videoWidth * 0.4;
+                    lowerLimit = videoWidth * 0.25;
+                    if (
+                        lastWidth == null ||
+                        lastWidth < lowerLimit ||
+                        lastWidth > upperLimit
+                    ) {
+                        sidepanel.style.width = `${target}px`;
                     } else {
                         sidepanel.style.width = `${lastWidth}px`;
                     }
                     handle.style.pointerEvents = 'auto';
+                    duringTransition(250, () =>
+                        window.dispatchEvent(new Event('resize'))
+                    );
                 };
 
                 isOpen ? open() : close(); // Init.
@@ -126,7 +150,13 @@ export const CON = {
                     if (!isResizing) return;
                     const delta = startX - e.clientX; // Left handle.
                     // const delta = e.clientX - startX; // Right handle.
-                    sidepanel.style.width = `${startWidth + delta}px`;
+
+                    // Enforce limits on resizing.
+                    const calculated = startWidth + delta;
+                    if (calculated > upperLimit || calculated < lowerLimit)
+                        return;
+                    sidepanel.style.width = `${calculated}px`;
+                    window.dispatchEvent(new Event('resize'));
                 });
                 document.addEventListener('mouseup', () => {
                     isResizing = false;
@@ -134,24 +164,8 @@ export const CON = {
                     sidepanel.classList.remove('resizing');
                 });
 
-                // Avoid invoking YT hover for extension.
-                // Need to be careful about this, bc this is ruining other event listner impl
-                // sidepanel.addEventListener(
-                //     'mousemove',
-                //     (e) => {
-                //         sidepanel.style.cursor = 'auto';
-                //         // e.stopPropagation();
-                //     },
-                //     true
-                // );
-                // sidepanel.addEventListener(
-                //     'wheel',
-                //     (e) => {
-                //         console.log('caught');
-                //         // e.stopPropagation();
-                //     },
-                //     true
-                // );
+                // Fix Youtube hotkeys interfering with text
+                // I would assume add an event listener when on the text that ignores?
 
                 observe.disconnect();
             }

@@ -8,11 +8,18 @@
     height: 100%;
 }
 
-.applied-html5-video-container {
+.applied-movie-player {
     position: relative !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+}
+
+.applied-html5-video-container {
+    /* position: relative !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important; */
     width: 100%;
 }
 
@@ -24,6 +31,10 @@
     right: auto !important;
     top: auto !important;
 }
+
+/* .applied-ytp-chrome-bottom {
+    width: 100% !important;
+} */
 
 /* Sidepanel */
 
@@ -70,6 +81,7 @@
     height: max-content;
     z-index: 20;
     transition: width 250ms ease;
+    overflow: hidden;
 }
 .resizing {
     transition: none !important;

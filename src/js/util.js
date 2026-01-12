@@ -47,3 +47,16 @@ export function startLoggingClicks() {
         true
     );
 }
+
+export function duringTransition(duration, callback) {
+    const start = performance.now();
+
+    function tick(now) {
+        callback();
+        if (now - start < duration) {
+            requestAnimationFrame(tick);
+        }
+    }
+
+    requestAnimationFrame(tick);
+}
