@@ -1,15 +1,34 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { watch } = require('fs');
 
 module.exports = {
     mode: 'development', // or 'production'
     devtool: 'source-map', // No eval, to support webpack with Chrome
     entry: {
-        content: './src/index.js',
+        content: './src/index.ts',
+        background: './src/background.ts',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'webpack.bundle.js',
+        filename: '[name].js',
+        clean: true,
+    },
+    module: {
+        rules: [
+            {
+                test: /\.html$/,
+                type: 'asset/source',
+            },
+            {
+                test: /\.ts$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+        ],
+    },
+    resolve: {
+        extensions: ['.ts', '.js'],
     },
     plugins: [
         new CopyWebpackPlugin({
@@ -21,12 +40,5 @@ module.exports = {
             ],
         }),
     ],
-    module: {
-        rules: [
-            {
-                test: /\.html$/,
-                type: 'asset/source',
-            },
-        ],
-    },
+    watch: true,
 };

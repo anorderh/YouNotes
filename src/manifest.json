@@ -6,10 +6,24 @@
     "action": {
         "default_icon": "images/icon.png"
     },
+    "permissions": ["commands"],
+    "commands": {
+        "reload": {
+            "suggested_key": {
+                "default": "Ctrl+R",
+                "mac": "Command+R"
+            },
+            "description": "Reload the extension."
+        }
+    },
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
     "content_scripts": [
         {
-            "js": ["webpack.bundle.js"],
-            "css": ["css/main.css"],
+            "js": ["content.js"],
+            "css": ["css/main.css", "css/bootstrap-scoped.css"],
             "matches": ["https://www.youtube.com/*"]
         }
     ],

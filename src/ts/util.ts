@@ -1,28 +1,32 @@
-import { debug } from './flags.js';
+import { debug } from './flags';
 
-export async function loadHtmlIntoElement(html) {
+export function loadHtmlIntoElement(html: string): HTMLElement | null {
     const element = document.createElement('template');
     element.innerHTML = html;
-    return element.content;
+    const el = element.content.firstElementChild;
+    if (!el) {
+        throw new Error('HTML must have a single root element');
+    }
+    return el as HTMLElement;
 }
 
-export function getElementByClass(className) {
+export function getElementByClass(className: string): HTMLElement | null {
     const elements = document.getElementsByClassName(className);
     if (elements.length > 0) {
-        return elements[0];
+        return elements[0] as HTMLElement;
     } else {
         return null;
     }
 }
 
-export function matchSize(input, target) {
+export function matchSize(input: HTMLElement, target: HTMLElement) {
     // Set container's dimensions to movie player.
     const rect = target.getBoundingClientRect();
     input.style.height = `${rect.height}px`;
     input.style.width = `${rect.width}px`;
 }
 
-export function debugLog(input) {
+export function debugLog(input: string) {
     debug && console.log(input);
 }
 
@@ -48,10 +52,10 @@ export function startLoggingClicks() {
     );
 }
 
-export function duringTransition(duration, callback) {
+export function duringTransition(duration: number, callback: Function) {
     const start = performance.now();
 
-    function tick(now) {
+    function tick(now: number) {
         callback();
         if (now - start < duration) {
             requestAnimationFrame(tick);

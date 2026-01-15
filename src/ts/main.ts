@@ -47,15 +47,15 @@ export const CON = {
             if (video) {
                 const moviePlayer = document.getElementById(
                     CON.YT.IDS.MOVIE_PLAYER
-                );
+                )!;
                 const html5Video = getElementByClass(
                     CON.YT.CLASSES.HTML5_VIDEO_CONTAINER
-                );
+                )!;
 
                 // Create container.
                 const extContainer = document.createElement('div');
                 extContainer.className = CON.EXT.CLASSES.EXT_CONTAINER;
-                moviePlayer.parentNode.insertBefore(extContainer, moviePlayer);
+                moviePlayer.parentNode!.insertBefore(extContainer, moviePlayer);
 
                 // Modify CSS of YT elements.
                 moviePlayer.classList.add(CON.EXT.CLASSES.APPLIED_MOVIE_PLAYER);
@@ -65,20 +65,22 @@ export const CON = {
                 video.classList.add(CON.EXT.CLASSES.APPLIED_VIDEO);
                 getElementByClass(
                     CON.YT.CLASSES.YTP_CHROME_TOP_BUTTONS
-                ).style.pointerEvents = 'none';
+                )!.style!.pointerEvents = 'none';
 
                 // Add moviePlayer container and sidepanel
                 extContainer.appendChild(moviePlayer);
-                const sidepanelHtmlElement = await loadHtmlIntoElement(
-                    sidepanelHtml
-                );
+                const sidepanelHtmlElement =
+                    loadHtmlIntoElement(sidepanelHtml)!;
                 extContainer.appendChild(sidepanelHtmlElement);
 
                 // Sidepanel functionality....
-                const sidepanel = document.getElementById('sidepanel');
-                const sidepanelBtn = document.getElementById('sidepanel-btn');
-                const sidepanelIcon = document.getElementById('sidepanel-icon');
-                const handle = document.querySelector('.resize-handle');
+                const sidepanel = document.getElementById('sidepanel')!;
+                const sidepanelBtn = document.getElementById('sidepanel-btn')!;
+                const sidepanelIcon =
+                    document.getElementById('sidepanel-icon')!;
+                const handle = document.querySelector(
+                    '.resize-handle'
+                )! as HTMLElement;
                 let isOpen = false;
                 let isResizing = false;
 
@@ -95,8 +97,8 @@ export const CON = {
                 };
 
                 // Setup open.close of sidepanel.
-                let lastWidth;
-                let upperLimit, lowerLimit;
+                let lastWidth: number;
+                let upperLimit: number, lowerLimit: number;
                 const close = () => {
                     isOpen = false;
                     lastWidth = sidepanel.getBoundingClientRect().width;
@@ -137,7 +139,7 @@ export const CON = {
                 });
 
                 // Setup resize handle.
-                let startX, startWidth;
+                let startX: number, startWidth: number;
                 handle.addEventListener('mousedown', (e) => {
                     isResizing = true;
                     startX = e.clientX;
