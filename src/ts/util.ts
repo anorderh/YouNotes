@@ -1,4 +1,4 @@
-import { debug } from './flags';
+import { globals } from './global';
 
 export function loadHtmlIntoElement(html: string): HTMLElement | null {
     const element = document.createElement('template');
@@ -27,7 +27,7 @@ export function matchSize(input: HTMLElement, target: HTMLElement) {
 }
 
 export function debugLog(input: string) {
-    debug && console.log(input);
+    globals.debug && console.log(input);
 }
 
 export function startLoggingClicks() {
