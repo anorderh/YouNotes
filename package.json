@@ -4,6 +4,7 @@
     },
     "dependencies": {
         "@tiptap/core": "^3.15.3",
+        "@tiptap/extensions": "^3.15.3",
         "@tiptap/pm": "^3.15.3",
         "@tiptap/starter-kit": "^3.15.3",
         "chrome-types": "^0.1.404"

@@ -64,3 +64,9 @@ export function duringTransition(duration: number, callback: Function) {
 
     requestAnimationFrame(tick);
 }
+
+export function isEmptyHtml(html: string) {
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    return temp.textContent?.trim() === '';
+}

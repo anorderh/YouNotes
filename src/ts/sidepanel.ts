@@ -1,11 +1,15 @@
 import { Editor } from '@tiptap/core';
+import { Placeholder } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
+import redCircleHtml from '../html/red-circle.html';
+import savingStatusHtml from '../html/saving-status.html';
 import sidepanelHtml from '../html/sidepanel.html';
 import { globals } from './global';
 import { SELECTORS } from './selectors';
 import {
     duringTransition,
     getElementByClass,
+    isEmptyHtml,
     loadHtmlIntoElement,
 } from './util';
 
@@ -89,9 +93,12 @@ export async function setupSidepanelOpenClose(): Promise<void> {
             globals.width.lastWidth < globals.width.lowerLimit ||
             globals.width.lastWidth > globals.width.upperLimit
         ) {
-            sidepanel.style.width = `${target}px`;
+            let width = `${target}px`;
+            sidepanelContent.style.width = width;
+            sidepanel.style.width = width;
         } else {
-            sidepanel.style.width = `${globals.width.lastWidth}px`;
+            let width = `${globals.width.lastWidth}px`;
+            sidepanel.style.width = width;
         }
         handle.style.pointerEvents = 'auto';
         duringTransition(250, () => window.dispatchEvent(new Event('resize')));
@@ -147,7 +154,12 @@ export async function setupSidepanelEditor(): Promise<void> {
     // Setup editor.
     var editor = new Editor({
         element: document.querySelector('.content'),
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            Placeholder.configure({
+                placeholder: 'Take some notes ...',
+            }),
+        ],
         editorProps: {
             attributes: {
                 class: 'no-focus',
@@ -175,6 +187,7 @@ export async function setupSidepanelEditor(): Promise<void> {
 
     // Save & edit content across different URLs.
     const statusElement = document.getElementById('status')!;
+    const bottomRightBadge = document.getElementById('bottom-right-badge')!;
     let onUpdate: ({ editor }: { editor: Editor }) => Promise<void>;
     let key: string | null = null;
     let savedUrl: string | null = null;
@@ -187,27 +200,48 @@ export async function setupSidepanelEditor(): Promise<void> {
         key = `${globals.storageKeyPrefix}${location.href}`;
 
         // Load initial content.
-        const { [key]: content } = await chrome.storage.local.get(key);
-        if (!!content) {
+        const { [key]: content }: { [key: string]: string } =
+            await chrome.storage.local.get(key);
+        statusElement.innerHTML = '';
+        // Consider empty HTML as new notes.
+        if (!isEmptyHtml(content ?? '')) {
             editor.chain().setContent(content, { emitUpdate: false }).run();
-            statusElement.textContent = 'Content loaded!';
+            bottomRightBadge.innerHTML = redCircleHtml;
         } else {
             editor.chain().setContent('', { emitUpdate: false }).run();
-            statusElement.textContent = 'Take some notes!';
+            bottomRightBadge.innerHTML = '';
         }
 
         // Track & save updates.
+        let waitTimeout: number | undefined;
         let saveTimeout: number | undefined;
         if (onUpdate != null) editor.off('update', onUpdate);
         onUpdate = async ({ editor }) => {
             const currContent = editor.getHTML();
-            if (saveTimeout) clearTimeout(saveTimeout);
-            statusElement.textContent = 'Saving content...';
-            saveTimeout = window.setTimeout(async () => {
-                await chrome.storage.local.set({ [key!]: currContent });
-                statusElement.textContent = 'Content saved!';
-                saveTimeout = undefined;
-            }, 1500);
+
+            if (waitTimeout) {
+                clearTimeout(waitTimeout);
+            }
+            if (saveTimeout) {
+                // Change occurred during save, stop save.
+                clearTimeout(saveTimeout);
+                statusElement.innerHTML = '';
+            }
+
+            waitTimeout = window.setTimeout(async () => {
+                statusElement.innerHTML = savingStatusHtml;
+                saveTimeout = window.setTimeout(async () => {
+                    if (!isEmptyHtml(currContent ?? '')) {
+                        await chrome.storage.local.set({ [key!]: currContent });
+                        bottomRightBadge.innerHTML = redCircleHtml;
+                    } else {
+                        await chrome.storage.local.remove(key!);
+                        bottomRightBadge.innerHTML = '';
+                    }
+                    statusElement.innerHTML = '';
+                    saveTimeout = undefined;
+                }, 200);
+            }, 100);
         };
         editor.on('update', onUpdate);
     }).observe(document, { childList: true, subtree: true });
