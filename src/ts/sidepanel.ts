@@ -47,6 +47,7 @@ export async function setupSidepanelOpenClose(): Promise<void> {
         SELECTORS.YT.CLASSES.HTML5_VIDEO_CONTAINER
     )!;
     const sidepanel = document.getElementById('sidepanel')!;
+    const sidepanelContent = document.getElementById('sidepanel-content')!;
     const sidepanelBtn = document.getElementById('sidepanel-btn')!;
     const sidepanelIcon = document.getElementById('sidepanel-icon')!;
     const handle = document.querySelector('.resize-handle')! as HTMLElement;
@@ -68,6 +69,7 @@ export async function setupSidepanelOpenClose(): Promise<void> {
     const close = () => {
         globals.open = false;
         globals.width.lastWidth = sidepanel.getBoundingClientRect().width;
+        sidepanelContent.style.width = `${globals.width.lastWidth}px`; // Fix to prevent weird wrapping.
         sidepanel.style.width = '0px';
         handle.style.pointerEvents = 'none';
         extContainer.addEventListener('mouseenter', appear);
@@ -93,6 +95,9 @@ export async function setupSidepanelOpenClose(): Promise<void> {
         }
         handle.style.pointerEvents = 'auto';
         duringTransition(250, () => window.dispatchEvent(new Event('resize')));
+        setTimeout(() => {
+            sidepanelContent.style.width = ``; // Fix to prevent weird wrapping.
+        }, 250);
     };
 
     globals.open ? open() : close(); // Init.
@@ -168,28 +173,42 @@ export async function setupSidepanelEditor(): Promise<void> {
             }
         });
 
-    // Save & edit content
-    const key = `${globals.storageKeyPrefix}${location.origin}${location.pathname}`;
-    console.log(`KEY${key}`);
+    // Save & edit content across different URLs.
     const statusElement = document.getElementById('status')!;
-    editor.on('create', async ({ editor }) => {
+    let onUpdate: ({ editor }: { editor: Editor }) => Promise<void>;
+    let key: string | null = null;
+    let savedUrl: string | null = null;
+    new MutationObserver(async () => {
+        let currUrl = location.href;
+        if (savedUrl != null && savedUrl === currUrl) return;
+
+        // New 'href' identified, track url and reload content.
+        savedUrl = currUrl;
+        key = `${globals.storageKeyPrefix}${location.href}`;
+
+        // Load initial content.
         const { [key]: content } = await chrome.storage.local.get(key);
         if (!!content) {
             editor.chain().setContent(content, { emitUpdate: false }).run();
             statusElement.textContent = 'Content loaded!';
         } else {
+            editor.chain().setContent('', { emitUpdate: false }).run();
             statusElement.textContent = 'Take some notes!';
         }
-    });
-    let saveTimeout: number | undefined;
-    editor.on('update', async ({ editor }) => {
-        const currContent = editor.getHTML();
-        if (saveTimeout) clearTimeout(saveTimeout);
-        statusElement.textContent = 'Saving content...';
-        saveTimeout = window.setTimeout(async () => {
-            await chrome.storage.local.set({ [key]: currContent });
-            statusElement.textContent = 'Content saved!';
-            saveTimeout = undefined;
-        }, 1500);
-    });
+
+        // Track & save updates.
+        let saveTimeout: number | undefined;
+        if (onUpdate != null) editor.off('update', onUpdate);
+        onUpdate = async ({ editor }) => {
+            const currContent = editor.getHTML();
+            if (saveTimeout) clearTimeout(saveTimeout);
+            statusElement.textContent = 'Saving content...';
+            saveTimeout = window.setTimeout(async () => {
+                await chrome.storage.local.set({ [key!]: currContent });
+                statusElement.textContent = 'Content saved!';
+                saveTimeout = undefined;
+            }, 1500);
+        };
+        editor.on('update', onUpdate);
+    }).observe(document, { childList: true, subtree: true });
 }

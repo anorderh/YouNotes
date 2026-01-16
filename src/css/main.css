@@ -106,14 +106,6 @@
     pointer-events: none;
 }
 
-.sidepanel-content {
-    padding: 8px;
-    color: white;
-    font-size: 18px;
-    margin-top: 24px;
-    overflow: auto;
-}
-
 .status-text {
     color: white;
     opacity: 0.6;
