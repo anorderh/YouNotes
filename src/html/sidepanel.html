@@ -1,5 +1,5 @@
 <div id="sidepanel-ctn" class="sidepanel-ctn bs">
-    <div id="sidepanel-btn" class="sidepanel-btn shadow-sm">
+    <button data-tooltip="YouNotes" data-tooltip-align="left" data-tooltip-hotkey="Q" id="sidepanel-btn" class="sidepanel-btn shadow-sm btn-react">
         <div id="sidepanel-icon" class="sidepanel-icon sidepanel-toggle">
             <svg
                 style="width: 18px; height: 18px"
@@ -13,7 +13,7 @@
                 <div class="red-circle"></div>
             </div>
         </div>
-    </div>
+    </button>
     <div id="resize-handle" class="resize-handle"></div>
     <div id="sidepanel" class="sidepanel">
         <div id="sidepanel-content">
@@ -21,36 +21,432 @@
                 <!-- Placeholder -->
             </div>
             <!-- Text content -->
-            <div class="h-100 d-flex flex-column pb-4">
+            <div class="h-100 d-flex flex-column">
                 <div class="d-flex flex-column mx-4 mt-4">
-                    <div class="overflow-auto w-100 hide-scrollbar">
+                    <div
+                        id="menu-bar-container"
+                        class="overflow-auto w-100 hide-scrollbar">
                         <div
                             class="menu-bar shadow d-flex flex-row justify-content-center align-items-top">
-                            <div class="menu-bar-btn">1</div>
-                            <div class="menu-bar-btn">2</div>
-                            <div class="menu-bar-btn">3</div>
-                            <div class="menu-bar-btn">4</div>
-                            <div class="menu-bar-btn">5</div>
-                            <div class="menu-bar-btn">5</div>
-                            <div class="menu-bar-btn">5</div>
-                            <div class="menu-bar-btn">5</div>
-                            <div class="menu-bar-btn">5</div>
-                            <div class="menu-bar-btn">5</div>
-                            <div class="menu-bar-btn">5</div>
-                            <div class="menu-bar-btn">5</div>
-                            <div class="menu-bar-btn">5</div>
+                            <button
+                                data-tooltip="Undo"
+                                data-tooltip-hotkey="Ctrl+Z" 
+                                id="menu-undo"
+                                title="Undo edit"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M24 192l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-46.7-46.7c75.3-58.6 184.3-53.3 253.5 15.9 75 75 75 196.5 0 271.5s-196.5 75-271.5 0c-10.2-10.2-19-21.3-26.4-33-9.5-14.9-29.3-19.3-44.2-9.8s-19.3 29.3-9.8 44.2C49.7 408.7 61.4 423.5 75 437 175 537 337 537 437 437S537 175 437 75C342.8-19.3 193.3-24.7 92.7 58.8L41 7C34.1 .2 23.8-1.9 14.8 1.8S0 14.3 0 24L0 168c0 13.3 10.7 24 24 24z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip="Redo"
+                                data-tooltip-hotkey="Ctrl+Shift+Z" 
+                                id="menu-redo"
+                                title="Redo edit"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M488 192l-144 0c-9.7 0-18.5-5.8-22.2-14.8s-1.7-19.3 5.2-26.2l46.7-46.7c-75.3-58.6-184.3-53.3-253.5 15.9-75 75-75 196.5 0 271.5s196.5 75 271.5 0c8.2-8.2 15.5-16.9 21.9-26.1 10.1-14.5 30.1-18 44.6-7.9s18 30.1 7.9 44.6c-8.5 12.2-18.2 23.8-29.1 34.7-100 100-262.1 100-362 0S-25 175 75 75c94.3-94.3 243.7-99.6 344.3-16.2L471 7c6.9-6.9 17.2-8.9 26.2-5.2S512 14.3 512 24l0 144c0 13.3-10.7 24-24 24z" />
+                                </svg>
+                            </button>
+                            <div class="separator"></div>
+                            <button
+                            data-tooltip-hotkey="#" 
+                                data-tooltip="Heading 1"
+                                id="h1"
+                                title="Heading 1"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon-size"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-h-1">
+                                    <path
+                                        stroke="none"
+                                        d="M0 0h24v24H0z"
+                                        fill="none" />
+                                    <path d="M19 18v-8l-2 2" />
+                                    <path d="M4 6v12" />
+                                    <path d="M12 6v12" />
+                                    <path d="M11 18h2" />
+                                    <path d="M3 18h2" />
+                                    <path d="M4 12h8" />
+                                    <path d="M3 6h2" />
+                                    <path d="M11 6h2" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip="Heading 2"
+                                data-tooltip-hotkey="##" 
+                                id="h2"
+                                title="Heading 2"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon-size"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-h-2">
+                                    <path
+                                        stroke="none"
+                                        d="M0 0h24v24H0z"
+                                        fill="none" />
+                                    <path
+                                        d="M17 12a2 2 0 1 1 4 0c0 .591 -.417 1.318 -.816 1.858l-3.184 4.143l4 0" />
+                                    <path d="M4 6v12" />
+                                    <path d="M12 6v12" />
+                                    <path d="M11 18h2" />
+                                    <path d="M3 18h2" />
+                                    <path d="M4 12h8" />
+                                    <path d="M3 6h2" />
+                                    <path d="M11 6h2" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip="Heading 3"
+                                data-tooltip-hotkey="###"
+                                id="h3"
+                                title="Heading 3"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon-size"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-h-3">
+                                    <path
+                                        stroke="none"
+                                        d="M0 0h24v24H0z"
+                                        fill="none" />
+                                    <path d="M19 14a2 2 0 1 0 -2 -2" />
+                                    <path d="M17 16a2 2 0 1 0 2 -2" />
+                                    <path d="M4 6v12" />
+                                    <path d="M12 6v12" />
+                                    <path d="M11 18h2" />
+                                    <path d="M3 18h2" />
+                                    <path d="M4 12h8" />
+                                    <path d="M3 6h2" />
+                                    <path d="M11 6h2" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip-hotkey="-"
+                                data-tooltip="Bullet list"
+                                id="bulletlist"
+                                title="Bullet List"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M40 48C26.7 48 16 58.7 16 72l0 48c0 13.3 10.7 24 24 24l48 0c13.3 0 24-10.7 24-24l0-48c0-13.3-10.7-24-24-24L40 48zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM16 232l0 48c0 13.3 10.7 24 24 24l48 0c13.3 0 24-10.7 24-24l0-48c0-13.3-10.7-24-24-24l-48 0c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24l0 48c0 13.3 10.7 24 24 24l48 0c13.3 0 24-10.7 24-24l0-48c0-13.3-10.7-24-24-24l-48 0z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip-hotkey="1."
+                                data-tooltip="Numbered list"
+                                title="Numbered List"
+                                id="numberedlist"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M0 72C0 58.8 10.7 48 24 48l48 0c13.3 0 24 10.7 24 24l0 104 24 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-96 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l24 0 0-80-24 0C10.7 96 0 85.3 0 72zM30.4 301.2C41.8 292.6 55.7 288 70 288l4.9 0c33.7 0 61.1 27.4 61.1 61.1 0 19.6-9.4 37.9-25.2 49.4l-24 17.5 33.2 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-90.7 0C13.1 464 0 450.9 0 434.7 0 425.3 4.5 416.5 12.1 411l70.5-51.3c3.4-2.5 5.4-6.4 5.4-10.6 0-7.2-5.9-13.1-13.1-13.1L70 336c-3.9 0-7.7 1.3-10.8 3.6L38.4 355.2c-10.6 8-25.6 5.8-33.6-4.8S-1 324.8 9.6 316.8l20.8-15.6zM224 64l256 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-256 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 160l256 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-256 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 160l256 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-256 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip-hotkey="[ ]"
+                                data-tooltip="Task list"
+                                title="Task List"
+                                id="tasklist"
+                                class="menu-bar-btn btn-react">
+                                <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M133.8 36.3c10.9 7.6 13.5 22.6 5.9 33.4l-56 80c-4.1 5.8-10.5 9.5-17.6 10.1S52 158 47 153L7 113C-2.3 103.6-2.3 88.4 7 79S31.6 69.7 41 79l19.8 19.8 39.6-56.6c7.6-10.9 22.6-13.5 33.4-5.9zm0 160c10.9 7.6 13.5 22.6 5.9 33.4l-56 80c-4.1 5.8-10.5 9.5-17.6 10.1S52 318 47 313L7 273c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l19.8 19.8 39.6-56.6c7.6-10.9 22.6-13.5 33.4-5.9zM224 96c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zm0 160c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zM160 416c0-17.7 14.3-32 32-32l288 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-288 0c-17.7 0-32-14.3-32-32zM64 376a40 40 0 1 1 0 80 40 40 0 1 1 0-80z"/></svg>
+                            </button>
+                            <button
+                                data-tooltip-hotkey=">"
+                                data-tooltip="Blockquote"
+                                title="Blockquote"
+                                id="blockquote"
+                                class="menu-bar-btn btn-react">
+                                <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M0 216C0 149.7 53.7 96 120 96l8 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-8 0c-30.9 0-56 25.1-56 56l0 8 64 0c35.3 0 64 28.7 64 64l0 64c0 35.3-28.7 64-64 64l-64 0c-35.3 0-64-28.7-64-64L0 216zm256 0c0-66.3 53.7-120 120-120l8 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-8 0c-30.9 0-56 25.1-56 56l0 8 64 0c35.3 0 64 28.7 64 64l0 64c0 35.3-28.7 64-64 64l-64 0c-35.3 0-64-28.7-64-64l0-136z"/></svg>
+                            </button>
+                            <button
+                                data-tooltip-hotkey="```[lang]"
+                                data-tooltip="Codeblock"
+                                title="Codeblock"
+                                id="codeblock"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    width="24px"
+                                    height="24px"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z" />
+                                    <path
+                                        d="M9.293 9.293 5.586 13l3.707 3.707 1.414-1.414L8.414 13l2.293-2.293zm5.414 0-1.414 1.414L15.586 13l-2.293 2.293 1.414 1.414L18.414 13z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip="Bold"
+                                data-tooltip-hotkey="Ctrl+B"
+                                title="Bold"
+                                id="bold"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 384 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l32 0 0 320-32 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l224 0c70.7 0 128-57.3 128-128 0-46.5-24.8-87.3-62-109.7 18.7-22.3 30-51 30-82.3 0-70.7-57.3-128-128-128L32 32zM288 160c0 35.3-28.7 64-64 64l-96 0 0-128 96 0c35.3 0 64 28.7 64 64zM128 416l0-128 128 0c35.3 0 64 28.7 64 64s-28.7 64-64 64l-128 0z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip="Italic"
+                                data-tooltip-hotkey="Ctrl+I"
+                                title="Italic"
+                                id="italic"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 384 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M128 64c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-58.7 0-133.3 320 64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 480c-17.7 0-32-14.3-32-32s14.3-32 32-32l58.7 0 133.3-320-64 0c-17.7 0-32-14.3-32-32z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip="Strikethrough"
+                                data-tooltip-hotkey="~~[...]~~"
+                                title="Strikethrough"
+                                id="strikethrough"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M96 157.5C96 88.2 152.2 32 221.5 32L368 32c17.7 0 32 14.3 32 32s-14.3 32-32 32L221.5 96c-34 0-61.5 27.5-61.5 61.5 0 31 23.1 57.2 53.9 61l44.1 5.5 222 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l83.1 0C103 204.6 96 181.8 96 157.5zM349.2 336l65.5 0c.9 6.1 1.4 12.2 1.4 18.5 0 69.3-56.2 125.5-125.5 125.5L144 480c-17.7 0-32-14.3-32-32s14.3-32 32-32l146.5 0c34 0 61.5-27.5 61.5-61.5 0-6.4-1-12.7-2.8-18.5z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip="Superscript"
+                                data-tooltip-hotkey="Ctrl+."
+                                title="Superscript"
+                                id="superscript"
+                                class="menu-bar-btn btn-react">
+                                <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M544 32c0-11.1-5.7-21.4-15.2-27.2s-21.2-6.4-31.1-1.4l-32 16C449.9 27.3 443.5 46.5 451.4 62.3 457 73.5 468.3 80 480 80l0 80c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-128zM96 64C78.3 64 64 78.3 64 96s14.3 32 32 32l15.3 0 89.6 128-89.6 128-15.3 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l32 0c10.4 0 20.2-5.1 26.2-13.6L240 311.8 325.8 434.4c6 8.6 15.8 13.6 26.2 13.6l32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-15.3 0-89.6-128 89.6-128 15.3 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-32 0c-10.4 0-20.2 5.1-26.2 13.6L240 200.2 154.2 77.6C148.2 69.1 138.4 64 128 64L96 64z"/></svg>
+                            </button>
+                            <button
+                                data-tooltip="Subscript"
+                                data-tooltip-hotkey="Ctrl+,"
+                                title="Subscript"
+                                id="subscript"
+                                class="menu-bar-btn btn-react">
+                                <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M96 64C78.3 64 64 78.3 64 96s14.3 32 32 32l15.3 0 89.6 128-89.6 128-15.3 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l32 0c10.4 0 20.2-5.1 26.2-13.6L240 311.8 325.8 434.4c6 8.6 15.8 13.6 26.2 13.6l32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-15.3 0-89.6-128 89.6-128 15.3 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-32 0c-10.4 0-20.2 5.1-26.2 13.6L240 200.2 154.2 77.6C148.2 69.1 138.4 64 128 64L96 64zM544 320c0-11.1-5.7-21.4-15.2-27.2s-21.2-6.4-31.1-1.4l-32 16c-15.8 7.9-22.2 27.1-14.3 42.9 5.6 11.2 16.9 17.7 28.6 17.7l0 80c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-128z"/></svg>
+                            </button>
+                            <button
+                                data-tooltip-hotkey="`[...]`"
+                                data-tooltip="Code"
+                                title="Code"
+                                id="menu-code"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 576 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M360.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm64.6 136.1c-12.5 12.5-12.5 32.8 0 45.3l73.4 73.4-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l96-96c12.5-12.5 12.5-32.8 0-45.3l-96-96c-12.5-12.5-32.8-12.5-45.3 0zm-274.7 0c-12.5-12.5-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 150.6 182.6c12.5-12.5 12.5-32.8 0-45.3z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip-hotkey="Ctrl+U"
+                                data-tooltip="Underline"
+                                title="Underline"
+                                id="underline"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 384 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M0 32C0 14.3 14.3 0 32 0L96 0c17.7 0 32 14.3 32 32S113.7 64 96 64l0 160c0 53 43 96 96 96s96-43 96-96l0-160c-17.7 0-32-14.3-32-32S270.3 0 288 0l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l0 160c0 88.4-71.6 160-160 160S32 312.4 32 224L32 64C14.3 64 0 49.7 0 32zM0 480c0-17.7 14.3-32 32-32l320 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 512c-17.7 0-32-14.3-32-32z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip-hotkey="==[...]=="
+                                data-tooltip="Highlight"
+                                title="Highlight"
+                                id="highlight"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 576 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M315 315L473.4 99.9 444.1 70.6 229 229 315 315zm-187 5l0 0 0-71.7c0-15.3 7.2-29.6 19.5-38.6L420.6 8.4C428 2.9 437 0 446.2 0 457.6 0 468.5 4.5 476.6 12.6l54.8 54.8c8.1 8.1 12.6 19 12.6 30.5 0 9.2-2.9 18.2-8.4 25.6L334.4 396.5c-9 12.3-23.4 19.5-38.6 19.5l-71.7 0-25.4 25.4c-12.5 12.5-32.8 12.5-45.3 0l-50.7-50.7c-12.5-12.5-12.5-32.8 0-45.3L128 320zM7 466.3l51.7-51.7 70.6 70.6-19.7 19.7c-4.5 4.5-10.6 7-17 7L24 512c-13.3 0-24-10.7-24-24l0-4.7c0-6.4 2.5-12.5 7-17z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip="Insert a link"
+                                title="Weblink"
+                                id="menu-link"
+                                class="menu-bar-btn btn-react">
+                                <svg
+                                    class="menu-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 576 512">
+                                    <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                    <path
+                                        d="M419.5 96c-16.6 0-32.7 4.5-46.8 12.7-15.8-16-34.2-29.4-54.5-39.5 28.2-24 64.1-37.2 101.3-37.2 86.4 0 156.5 70 156.5 156.5 0 41.5-16.5 81.3-45.8 110.6l-71.1 71.1c-29.3 29.3-69.1 45.8-110.6 45.8-86.4 0-156.5-70-156.5-156.5 0-1.5 0-3 .1-4.5 .5-17.7 15.2-31.6 32.9-31.1s31.6 15.2 31.1 32.9c0 .9 0 1.8 0 2.6 0 51.1 41.4 92.5 92.5 92.5 24.5 0 48-9.7 65.4-27.1l71.1-71.1c17.3-17.3 27.1-40.9 27.1-65.4 0-51.1-41.4-92.5-92.5-92.5zM275.2 173.3c-1.9-.8-3.8-1.9-5.5-3.1-12.6-6.5-27-10.2-42.1-10.2-24.5 0-48 9.7-65.4 27.1L91.1 258.2c-17.3 17.3-27.1 40.9-27.1 65.4 0 51.1 41.4 92.5 92.5 92.5 16.5 0 32.6-4.4 46.7-12.6 15.8 16 34.2 29.4 54.6 39.5-28.2 23.9-64 37.2-101.3 37.2-86.4 0-156.5-70-156.5-156.5 0-41.5 16.5-81.3 45.8-110.6l71.1-71.1c29.3-29.3 69.1-45.8 110.6-45.8 86.6 0 156.5 70.6 156.5 156.9 0 1.3 0 2.6 0 3.9-.4 17.7-15.1 31.6-32.8 31.2s-31.6-15.1-31.2-32.8c0-.8 0-1.5 0-2.3 0-33.7-18-63.3-44.8-79.6z" />
+                                </svg>
+                            </button>
+                            <button
+                                data-tooltip="Clear formatting"
+                                title="Clear formatting"
+                                id="menu-clear-formatting"
+                                class="menu-bar-btn btn-react">
+                                <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M41-24.9c-9.4-9.4-24.6-9.4-33.9 0S-2.3-.3 7 9.1l528 528c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9L322.7 256.9 368.2 96 471 96 465 120.2c-4.3 17.1 6.1 34.5 23.3 38.8s34.5-6.1 38.8-23.3l11-44.1C545.6 61.3 522.7 32 491.5 32l-319 0c-19.8 0-37.3 12.1-44.5 30.1l-87-87zM180.4 114.5l4.6-18.5 116.7 0-30.8 109-90.5-90.5zM241 310.8L211.3 416 160 416c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-42.2 0 15.1-53.3-51.9-51.9z"/></svg>
+                            </button>
                         </div>
                     </div>
-                    <div
-                        style="height: 19px"
-                        id="status"
-                        class="d-none status-text fs-5 fst-italic mt-1 d-flex justify-content-start align-items-center"></div>
                 </div>
-                <div style="height: 20px" class="w-100"></div>
+                <div
+                id="action-bar"
+                    class="w-100 px-2 d-flex justify-content-center align-items-center">
+                    <button
+                        data-tooltip=""
+                        data-tooltip-hotkey="A"
+                        id="collapsible-toggle"
+                        class="collapsible-toggle btn-react d-flex justify-content-center align-items-center flex-row fs-5 options-text"></button>
+                    <div id="focus-indicator" class="options-text d-flex flex-row justify-content-center align-items-center">
+                        <span id="focus-text" class="fs-5 me-2"></span>
+                        <div id="focus-key" class="hotkey-box"></div>
+                    </div>
+                </div>
+                <div id="collapsible" class="collapsible mx-4">
+                    <div id="collapsible-content" class="d-flex flex-row flex-wrap p-2 gap-2">
+                        <button
+                            data-tooltip=""
+                            data-tooltip-hotkey="/ts"
+                            id="timestamp-action"
+                            class="action-btn shadow-sm btn-react">
+                            <svg class="me-3"
+                                style="fill: white; width: 12px; height: 12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M464 256a208 208 0 1 1 -416 0 208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0 256 256 0 1 0 -512 0zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>
+                            <span class="text-nowrap">Insert Timestamp</span>
+                        </button>
+                        <button
+                            data-tooltip=""
+                            data-tooltip-hotkey="/ss"
+                            id="screenshot-action"
+                            class="action-btn shadow-sm btn-react">
+                           <svg class="me-3" style="fill: white; width: 12px; height: 12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M149.1 64.8L138.7 96 64 96C28.7 96 0 124.7 0 160L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64l-74.7 0-10.4-31.2C356.4 45.2 338.1 32 317.4 32L194.6 32c-20.7 0-39 13.2-45.5 32.8zM256 192a96 96 0 1 1 0 192 96 96 0 1 1 0-192z"/></svg>
+                            <span class="text-nowrap">Insert Screenshot</span>
+                        </button>
+                        <button
+                            data-tooltip=""
+                            data-tooltip-hotkey="/img"
+                            id="upload-action"
+                            class="action-btn shadow-sm btn-react">
+                           <svg class="me-3" style="fill: white; width: 12px; height: 12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M256 109.3L256 320c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-210.7-41.4 41.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l96-96c12.5-12.5 32.8-12.5 45.3 0l96 96c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 109.3zM224 400c44.2 0 80-35.8 80-80l80 0c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64l0-32c0-35.3 28.7-64 64-64l80 0c0 44.2 35.8 80 80 80zm144 24a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/></svg>
+                            <span class="text-nowrap">Upload Image</span>
+                        </button>
+                        <button
+                            data-tooltip=""
+                            data-tooltip-hotkey="/date"
+                            id="date-action"
+                            class="action-btn shadow-sm btn-react">
+                           <svg class="me-3" style="fill: white; width: 12px; height: 12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M128 0c17.7 0 32 14.3 32 32l0 32 128 0 0-32c0-17.7 14.3-32 32-32s32 14.3 32 32l0 32 32 0c35.3 0 64 28.7 64 64l0 288c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 128C0 92.7 28.7 64 64 64l32 0 0-32c0-17.7 14.3-32 32-32zm0 256c-17.7 0-32 14.3-32 32l0 64c0 17.7 14.3 32 32 32l64 0c17.7 0 32-14.3 32-32l0-64c0-17.7-14.3-32-32-32l-64 0z"/></svg>
+                            <span class="text-nowrap">Insert Date</span>
+                        </button>
+                        <button
+                            id="copy-action"
+                            class="action-btn shadow-sm btn-react">
+                            <svg
+                                class="me-3"
+                                style="fill: white; width: 12px; height: 12px"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 448 512">
+                                <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                                <path
+                                    d="M192 0c-35.3 0-64 28.7-64 64l0 256c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-200.6c0-17.4-7.1-34.1-19.7-46.2L370.6 17.8C358.7 6.4 342.8 0 326.3 0L192 0zM64 128c-35.3 0-64 28.7-64 64L0 448c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-16-64 0 0 16-192 0 0-256 16 0 0-64-16 0z" />
+                            </svg>
+                            <span class="text-nowrap">Copy Content</span>
+                        </button>
+                        <button
+                            id="delete-action"
+                            class="action-btn shadow-sm btn-react">
+                            <svg class="me-3"
+                                style="fill: white; width: 12px; height: 12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M136.7 5.9L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-8.7-26.1C306.9-7.2 294.7-16 280.9-16L167.1-16c-13.8 0-26 8.8-30.4 21.9zM416 144L32 144 53.1 467.1C54.7 492.4 75.7 512 101 512L347 512c25.3 0 46.3-19.6 47.9-44.9L416 144z"/></svg>
+                            <span class="text-nowrap">Delete Content</span>
+                        </button>
+                    </div>
+                </div>
                 <div
                     id="content-container"
-                    class="overflow-auto flex-grow-1 mt-3 px-5">
-                    <div class="text-white fs-3 content"></div>
+                    class="overflow-auto flex-grow-1 mt-2 px-5 scrollable"
+                    spellcheck="false">
+                    <div class="content"></div>
+                    <div id="content-buffer" style="width: 100%"></div>
+                </div>
+                <div
+                    class="w-100 px-5 my-3 d-flex flex-row justify-content-between align-items-center"
+                    style="height: 60px">
+                    <div data-tooltip-align="top" data-tooltip="Storage" id="size-status" title="Manage storage in popup" class="d-flex flex-row gap-4 align-items-center me-4">
+                        <img
+                            id="ext-logo"
+                            class="btn-unreact shadow"></img>
+                        <span
+                            id="size-text"
+                            class="fs-5 status-text text-nowrap"></span>
+                    </div>
+                    <div
+                        data-tooltip="Status"
+                        data-tooltip-align="top"
+                        id="status"
+                        class="status-text fs-5 fst-italic d-flex justify-content-start align-items-center text-end">
+                        Loading...
+                    </div>
                 </div>
             </div>
         </div>

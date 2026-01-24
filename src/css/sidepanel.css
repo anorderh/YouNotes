@@ -1,0 +1,322 @@
+.sidepanel-ctn {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    z-index: 10;
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.15);
+}
+
+.sidepanel-icon {
+    position: relative; /* makes absolute inside it relative */
+    display: inline-block;
+    fill: rgb(238, 238, 238);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+.sidepanel-toggle {
+    padding: 4px;
+    padding-right: 2px;
+}
+
+.sidepanel-btn {
+    all: unset;
+    background-color: var(--btn-bg);
+    position: absolute;
+    left: 0px;
+    transition:
+        left 160ms ease-out,
+        background-color 0.2s ease,
+        transform 0.1s ease !important;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    top: 80px;
+    height: 60px;
+    width: 45px;
+    padding-right: 5px;
+
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    cursor: pointer;
+}
+
+.sidepanel {
+    background: var(--text-bg);
+    width: 0px;
+    height: 100% !important;
+    height: max-content;
+    z-index: 20;
+    transition: width 250ms ease;
+    overflow: hidden;
+}
+.resizing {
+    transition: none !important;
+}
+
+.sidepanel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.active-text {
+    color: var(--yt-text);
+}
+
+.options-text {
+    color: var(--yt-text);
+    opacity: 0.5;
+}
+
+.status-text {
+    color: var(--yt-text);
+    opacity: 0.5;
+}
+
+.resize-handle {
+    height: 100%;
+    width: 10px;
+    z-index: 80;
+    position: absolute;
+    left: -5px;
+    cursor: ew-resize;
+    background: transparent;
+    opacity: 0.5;
+}
+
+.overlay-btn {
+    background-color: var(--fore-bg);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    color: var(--yt-text);
+}
+
+#action-bar {
+    margin-top: 4px;
+    position: relative;
+}
+
+#focus-indicator {
+    position: absolute;
+    right: 25px;
+    transition: opacity 100ms;
+}
+
+.collapsible-toggle {
+    border-radius: 8px;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--text-bg);
+    color: var(--yt-text);
+    width: min-content;
+    text-wrap: nowrap;
+    border: none;
+    z-index: 30;
+}
+
+.collapsible {
+    transition:
+        height 250ms ease,
+        min-height 250ms ease;
+    overflow: clip;
+    max-height: max-content;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--btn-bg);
+    border-radius: 8px;
+    border: 0;
+    padding: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    color: var(--yt-text);
+    text-wrap: none;
+    width: min-content;
+    justify-content: center;
+    align-items: center;
+}
+
+.clickable {
+    cursor: pointer;
+    user-select: none;
+    transition: filter 0.15s ease;
+}
+
+.clickable:hover {
+    filter: brightness(1.25);
+}
+
+.circle {
+    border-radius: 50%;
+}
+
+.sidepanel-overlay .clickable {
+    pointer-events: auto; /* buttons or interactive stuff work */
+}
+
+#sidepanel-content {
+    height: 100%;
+}
+
+.content {
+    color: var(--yt-text);
+    /* min-height: 100%;
+    min-width: 100%; */
+    width: 100%;
+    /* height: 100%; */
+    /* Disable wrapping */
+    /* width: max-content;
+    height: max-content; */
+    border: none !important;
+}
+.no-focus {
+    outline: none;
+}
+
+#content-container {
+    width: 100%;
+    height: 100%;
+}
+
+.menu-bar {
+    background: var(--btn-bg);
+    width: fit-content;
+    border-radius: 8px;
+}
+
+.menu-bar-btn {
+    width: 45px;
+    height: 40px;
+    color: var(--yt-text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    margin: 4px;
+    border-radius: 8px; /* rounded corners */
+    background-color: transparent; /* default bg */
+}
+
+.btn-react,
+.btn-unreact {
+    cursor: pointer; /* indicate clickable */
+    transition:
+        background-color 0.2s ease,
+        transform 0.1s ease;
+}
+
+/* Hover effect: light gray */
+.btn-react:hover:not(:disabled) {
+    background-color: var(--fore-bg); /* light gray */
+}
+
+/* Click / active effect: darker gray + slight scale */
+.btn-react:active:not(:disabled) {
+    background-color: var(--fore-bg); /* slightly darker gray */
+    transform: scale(0.95); /* subtle press effect */
+}
+
+/* Disabled style */
+.btn-react:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Toggled btn formatting state */
+.btn-react.toggled {
+    background-color: var(--fore-bg);
+    color: var(--yt-text);
+}
+
+/* Hover effect: slightly darker */
+.btn-unreact:hover:not(:disabled) {
+    filter: brightness(0.9);
+}
+
+.btn-unreact:active:not(:disabled) {
+    transform: scale(0.95); /* subtle press effect */
+}
+
+/* Scroll fade support */
+/* Generic scroll fade support */
+.scroll-fade {
+    --fade-top: 0px;
+    --fade-bottom: 0px;
+    --fade-left: 0px;
+    --fade-right: 0px;
+
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent,
+        black var(--fade-top),
+        black calc(100% - var(--fade-bottom)),
+        transparent
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent,
+        black var(--fade-top),
+        black calc(100% - var(--fade-bottom)),
+        transparent
+    );
+}
+
+/* Horizontal override */
+.scroll-fade.horizontal {
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent,
+        black var(--fade-left),
+        black calc(100% - var(--fade-right)),
+        transparent
+    );
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        black var(--fade-left),
+        black calc(100% - var(--fade-right)),
+        transparent
+    );
+}
+
+.icon-default {
+    width: 10px;
+    height: 10px;
+    display: inline-flex;
+}
+
+.spinner {
+    animation: spin 0.8s linear infinite;
+}
+
+#ext-logo {
+    border-radius: 8px;
+    padding: 4px;
+    height: 50px;
+}
+
+.hotkey-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* subtle shadow */
+    /* font-family: monospace; */
+    font-size: 0.9em; /* slightly smaller */
+    color: white;
+    background-color: transparent;
+}

@@ -1,0 +1,389 @@
+/* Tiptap CSS */
+/* Placeholder (at the top) */
+p.is-editor-empty:first-child::before {
+    color: white;
+    opacity: 0.5;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
+
+.hide-scrollbar {
+    border: none;
+    outline: none;
+    overflow: auto; /* or scroll */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE / old Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+
+.minimal-scrollbar {
+    overflow: auto;
+
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.red-circle {
+    width: 100%;
+    height: 100%;
+    background-color: var(--yt-red);
+    border-radius: 50%; /* makes it a circle */
+}
+
+/* small circle at bottom-right */
+.bottom-right-badge {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    margin-bottom: 2px;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+}
+
+/* CSS fix for TipTap
+/* Neutralize Bootstrap text spacing inside .bs */
+/* Neutralize Bootstrap typography inside TipTap only */
+
+.bs .tiptap ul,
+.bs .tiptap ol {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.bs .tiptap * {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+.bs .tiptap hr {
+    border: none;
+    border-top: 1px solid var(--fore-bg);
+    margin: 2rem 0;
+}
+
+.bs .tiptap img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Restore list indentation */
+.bs .tiptap ul,
+.bs .tiptap ol {
+    padding-left: 1.25em;
+}
+
+/* Optional but recommended */
+.bs .tiptap ul {
+    list-style: disc;
+}
+
+.bs .tiptap ol {
+    list-style: decimal;
+}
+
+.bs .tiptap blockquote {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-left: 3px solid var(--shape-bg);
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+}
+
+.tiptap {
+    font-size: 1.6rem !important;
+}
+
+a:-webkit-any-link:read-write {
+    cursor: pointer;
+}
+/* Consistent heading spacing inside TipTap */
+.bs .tiptap h1,
+.bs .tiptap h2,
+.bs .tiptap h3,
+.bs .tiptap h4,
+.bs .tiptap h5,
+.bs .tiptap h6 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* .tiptap {
+    padding-bottom: 200px;
+} */
+
+.bs .tiptap a {
+    color: #2d68c4;
+    text-decoration: underline;
+}
+
+.bs .tiptap > *:first-child {
+    margin-top: 6px;
+}
+
+/* .bs .tiptap > *:last-child {
+    padding-bottom: 200px;
+} */
+
+.menu-icon {
+    width: 14px;
+    height: 14px;
+    fill: white;
+}
+
+.inactive {
+    opacity: 0.5;
+}
+
+.separator {
+    width: 2px;
+    background-color: var(--shape-bg);
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.bs .tiptap {
+    code {
+        background: none;
+        color: inherit;
+        padding: 0;
+    }
+
+    pre {
+        background: var(--fore-bg);
+        border-radius: 0.5rem;
+        font-family: 'JetBrainsMono', monospace;
+        margin: 1.5rem 0;
+        padding: 0.75rem 1rem;
+
+        code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+    }
+}
+
+/* Resize handles */
+.tiptap {
+    [data-resize-handle] {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 2px;
+        z-index: 10;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Corner handles */
+        &[data-resize-handle='top-left'],
+        &[data-resize-handle='top-right'],
+        &[data-resize-handle='bottom-left'],
+        &[data-resize-handle='bottom-right'] {
+            width: 8px;
+            height: 8px;
+        }
+
+        &[data-resize-handle='top-left'] {
+            top: -4px;
+            left: -4px;
+            cursor: nwse-resize;
+        }
+
+        &[data-resize-handle='top-right'] {
+            top: -4px;
+            right: -4px;
+            cursor: nesw-resize;
+        }
+
+        &[data-resize-handle='bottom-left'] {
+            bottom: -4px;
+            left: -4px;
+            cursor: nesw-resize;
+        }
+
+        &[data-resize-handle='bottom-right'] {
+            bottom: -4px;
+            right: -4px;
+            cursor: nwse-resize;
+        }
+
+        /* Edge handles */
+        &[data-resize-handle='top'],
+        &[data-resize-handle='bottom'] {
+            height: 6px;
+            left: 8px;
+            right: 8px;
+        }
+
+        &[data-resize-handle='top'] {
+            top: -3px;
+            cursor: ns-resize;
+        }
+
+        &[data-resize-handle='bottom'] {
+            bottom: -3px;
+            cursor: ns-resize;
+        }
+
+        &[data-resize-handle='left'],
+        &[data-resize-handle='right'] {
+            width: 6px;
+            top: 8px;
+            bottom: 8px;
+        }
+
+        &[data-resize-handle='left'] {
+            left: -3px;
+            cursor: ew-resize;
+        }
+
+        &[data-resize-handle='right'] {
+            right: -3px;
+            cursor: ew-resize;
+        }
+    }
+
+    [data-resize-state='true'] [data-resize-wrapper] {
+        outline: 1px solid rgba(0, 0, 0, 0.25);
+        border-radius: 0.125rem;
+    }
+
+    [data-resize-container] {
+        &[data-node='image'] {
+            justify-content: start;
+        }
+    }
+}
+
+/* Code syntax */
+.tiptap {
+    code {
+        background: none;
+        color: inherit;
+        font-size: 1.5rem;
+        padding: 0;
+    }
+    pre {
+        background: var(--black);
+        border-radius: 0.5rem;
+        color: var(--white);
+        font-family: 'JetBrainsMono', monospace;
+        margin: 1.5rem 0;
+        padding: 0.75rem 1rem;
+
+        code {
+            background: none;
+            color: inherit;
+            font-size: 1.5rem;
+            padding: 0;
+        }
+
+        /* Code styling */
+        .hljs-comment,
+        .hljs-quote {
+            color: #616161;
+        }
+
+        .hljs-variable,
+        .hljs-template-variable,
+        .hljs-attribute,
+        .hljs-tag,
+        .hljs-regexp,
+        .hljs-link,
+        .hljs-name,
+        .hljs-selector-id,
+        .hljs-selector-class {
+            color: #f98181;
+        }
+
+        .hljs-number,
+        .hljs-meta,
+        .hljs-built_in,
+        .hljs-builtin-name,
+        .hljs-literal,
+        .hljs-type,
+        .hljs-params {
+            color: #fbbc88;
+        }
+
+        .hljs-string,
+        .hljs-symbol,
+        .hljs-bullet {
+            color: #b9f18d;
+        }
+
+        .hljs-title,
+        .hljs-section {
+            color: #faf594;
+        }
+
+        .hljs-keyword,
+        .hljs-selector-tag {
+            color: #70cff8;
+        }
+
+        .hljs-emphasis {
+            font-style: italic;
+        }
+
+        .hljs-strong {
+            font-weight: 700;
+        }
+    }
+}
+
+/* List styling */
+/* Basic editor styles */
+.tiptap {
+    /* Task list specific styles */
+    ul[data-type='taskList'] {
+        list-style: none;
+        margin-left: 0;
+        padding: 0;
+
+        .bs .tiptap * {
+            margin-top: 0rem !important;
+            margin-bottom: 0rem !important;
+        }
+
+        li {
+            align-items: flex-start;
+            display: flex;
+
+            > label {
+                flex: 0 0 auto;
+                margin-right: 0.5rem;
+                user-select: none;
+            }
+
+            > div {
+                flex: 1 1 auto;
+            }
+        }
+
+        input[type='checkbox'] {
+            cursor: pointer;
+            background: black;
+        }
+
+        ul[data-type='taskList'] {
+            margin: 0;
+        }
+    }
+}

@@ -1,10 +1,16 @@
 {
-    "name": "Youtube Notes",
-    "description": "Take notes for videos directly on Youtube.com",
+    "name": "YouNotes",
+    "description": "Take video notes directly on Youtube!",
     "version": "1.0",
     "manifest_version": 3,
     "action": {
-        "default_icon": "images/icon.png"
+        "default_popup": "html/popup.html"
+    },
+    "icons": {
+        "16": "images/icons/younotes_3_128.png",
+        "32": "images/icons/younotes_3_128.png",
+        "48": "images/icons/younotes_48.png",
+        "128": "images/icons/younotes_128.png"
     },
     "permissions": ["commands", "storage"],
     "commands": {
@@ -23,13 +29,19 @@
     "content_scripts": [
         {
             "js": ["content.js"],
-            "css": ["css/main.css", "css/bootstrap-scoped.css"],
+            "css": [
+                "css/vars.css",
+                "css/tiptap.css",
+                "css/sidepanel.css",
+                "css/extension.css",
+                "css/bootstrap-utilities.min.css"
+            ],
             "matches": ["https://www.youtube.com/*"]
         }
     ],
     "web_accessible_resources": [
         {
-            "resources": ["html/sidepanel.html"],
+            "resources": ["html/*", "images/*"],
             "matches": ["https://www.youtube.com/*"]
         }
     ]

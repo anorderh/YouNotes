@@ -10,6 +10,9 @@ export const SELECTORS = {
         },
         IDs: {
             SIDEPANEL_ICON: 'sidepanel-icon',
+            COLLAPSIBLE_TOGGLE: 'collapsible-toggle',
+            COLLAPSIBLE: 'collapsible',
+            SIZE_TEEXT: 'size-text',
         },
     },
     YT: {
@@ -23,6 +26,7 @@ export const SELECTORS = {
         },
         SELECTORS: {
             VIDEO: 'video',
+            YTD_PLAYER: 'ytd-player',
         },
     },
 };
