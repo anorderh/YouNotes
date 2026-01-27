@@ -57,15 +57,15 @@ p.is-editor-empty:first-child::before {
 /* Neutralize Bootstrap text spacing inside .bs */
 /* Neutralize Bootstrap typography inside TipTap only */
 
-.bs .tiptap ul,
+/* .bs .tiptap ul,
 .bs .tiptap ol {
     margin-top: 1rem;
     margin-bottom: 1rem;
-}
+} */
 
 .bs .tiptap * {
-    margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
 }
 
 .bs .tiptap hr {
@@ -363,17 +363,30 @@ a:-webkit-any-link:read-write {
         }
 
         li {
-            align-items: flex-start;
             display: flex;
+            align-items: center;
+            margin-top: 0rem !important;
+            margin-bottom: 0rem !important;
 
             > label {
                 flex: 0 0 auto;
                 margin-right: 0.5rem;
                 user-select: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 0rem !important;
+                margin-bottom: 0rem !important;
             }
 
             > div {
                 flex: 1 1 auto;
+                margin-top: 0rem !important;
+                margin-bottom: 0rem !important;
+                > p {
+                    margin-top: 0rem !important;
+                    margin-bottom: 0rem !important;
+                }
             }
         }
 
@@ -385,5 +398,19 @@ a:-webkit-any-link:read-write {
         ul[data-type='taskList'] {
             margin: 0;
         }
+    }
+}
+
+.tiptap {
+    /* Dark mode checkbox base */
+    input[type='checkbox'] {
+        accent-color: #555; /* unchecked color */
+        background-color: #000; /* force dark base */
+        color-scheme: dark; /* 🔑 prevents white native styling */
+    }
+
+    /* Checked = red */
+    input[type='checkbox']:checked {
+        accent-color: #e11d48;
     }
 }

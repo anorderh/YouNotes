@@ -1,16 +1,18 @@
-import { SELECTORS } from './ts/selectors';
+import '../tooltip';
+import { SELECTORS } from './selectors';
 import {
     attachSidepanel,
+    listenToPopup,
     loadImages,
     setupSidepanelActions,
     setupSidepanelEditor,
     setupSidepanelHotkeys,
+    setupSidepanelLoadAndSave,
     setupSidepanelMenubar,
     setupSidepanelOpenClose,
     setupSidepanelResize,
     watchSidepanelChanges,
-} from './ts/sidepanel';
-import './ts/tooltip';
+} from './sidepanel';
 
 // Run code in asynchronous context.
 (async () => {
@@ -37,10 +39,12 @@ import './ts/tooltip';
         await setupSidepanelOpenClose();
         await setupSidepanelResize();
         await setupSidepanelEditor();
+        await setupSidepanelLoadAndSave();
         await setupSidepanelMenubar();
         await setupSidepanelActions();
         await setupSidepanelHotkeys();
         await watchSidepanelChanges();
+        await listenToPopup();
     }).observe(document.body, {
         childList: true,
         subtree: true,

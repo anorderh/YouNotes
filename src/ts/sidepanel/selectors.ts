@@ -20,9 +20,13 @@ export const SELECTORS = {
             HTML5_VIDEO_CONTAINER: 'html5-video-container',
             YTP_CHROME_TOP_BUTTONS: 'ytp-chrome-top-buttons',
             YTP_CHROME_BOTTOM: 'ytp-chrome-bottom',
+            YTP_TIME_DURATION: 'ytp-time-duration',
         },
         IDS: {
             MOVIE_PLAYER: 'movie_player',
+            TITLE: 'title',
+            CHANNEL_NAME: 'channel-name',
+            INFO: 'info',
         },
         SELECTORS: {
             VIDEO: 'video',

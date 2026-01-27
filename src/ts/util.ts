@@ -1,5 +1,6 @@
-import { globals } from './global';
-import { SELECTORS } from './selectors';
+import { globals } from './sidepanel/global';
+import { SELECTORS } from './sidepanel/selectors';
+import { VideoMetadata } from './types/interfaces';
 
 export function loadHtmlIntoElement(html: string): HTMLElement | null {
     const element = document.createElement('template');
@@ -155,6 +156,28 @@ export function getContentSize(html: string): string {
     return `${(bytes / 1024 ** 3).toFixed(2)} GB`;
 }
 
+export function parseContentSize(sizeStr: string): number {
+    // Trim and capture number + unit
+    const match = sizeStr.trim().match(/^([\d.]+)\s*(B|KB|MB|GB)$/i);
+    if (!match) throw new Error(`Invalid size string: "${sizeStr}"`);
+
+    const [, numStr, unit] = match;
+    const num = parseFloat(numStr);
+
+    switch (unit.toUpperCase()) {
+        case 'B':
+            return num;
+        case 'KB':
+            return Math.round(num * 1024);
+        case 'MB':
+            return Math.round(num * 1024 ** 2);
+        case 'GB':
+            return Math.round(num * 1024 ** 3);
+        default:
+            throw new Error(`Unknown unit: ${unit}`);
+    }
+}
+
 export function getVideoTime(): number {
     const video = document.querySelector(
         SELECTORS.YT.SELECTORS.VIDEO,
@@ -198,6 +221,21 @@ export function getVideoScreenshot() {
     canvas.height = 540;
     let ctx = canvas.getContext('2d')!;
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    let dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+
+    return dataUrl;
+}
+
+export function getChannelPicture() {
+    const picture = document.querySelector(
+        '#owner #avatar #img',
+    )! as HTMLImageElement;
+
+    let canvas = document.createElement('canvas');
+    canvas.width = 32;
+    canvas.height = 32;
+    let ctx = canvas.getContext('2d')!;
+    ctx.drawImage(picture, 0, 0, canvas.width, canvas.height);
     let dataUrl = canvas.toDataURL('image/jpeg', 1.0);
 
     return dataUrl;
@@ -306,3 +344,68 @@ export function formatShortcutForOS(keys: string[]) {
     // Join with plus sign
     return mappedKeys.join(isMac ? '' : '+');
 }
+
+export function parseISODuration(iso: string): number {
+    const match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+    if (!match) return 0;
+
+    const [, h, m, s] = match.map(Number);
+    return (h || 0) * 3600 + (m || 0) * 60 + (s || 0);
+}
+
+export async function readVideoMetadata(): Promise<VideoMetadata | null> {
+    const metadataKey = generateKey.metadata();
+    const { [metadataKey]: metadata }: { [key: string]: VideoMetadata | null } =
+        await chrome.storage.local.get(metadataKey);
+    return metadata;
+}
+
+export function getVideoMetadata(): VideoMetadata {
+    const channelName = document
+        .querySelector('#owner #channel-name #text')!
+        .textContent.trim();
+    const url = location.href;
+    const title = document
+        .querySelector('#above-the-fold #title')!
+        .textContent.trim();
+    const duration = getElementByClass(
+        SELECTORS.YT.CLASSES.YTP_TIME_DURATION,
+    )!.textContent;
+    const lastEdit = new Date().toISOString();
+
+    return {
+        title,
+        url,
+        channelName,
+        duration,
+        lastEdit,
+        size: '0 B',
+        uses: 0,
+    };
+}
+
+export const generateKey = {
+    metadata: (url?: string) => {
+        const id = url
+            ? new URL(url).searchParams.get('v')
+            : new URL(location.href).searchParams.get('v');
+        if (id == null) {
+            throw new Error('Video ID failed to be parsed from current page');
+        }
+        return `metadata_${id}`;
+    },
+    content: (url?: string) => {
+        const id = url
+            ? new URL(url).searchParams.get('v')
+            : new URL(location.href).searchParams.get('v');
+        if (id == null) {
+            throw new Error('Video ID failed to be parsed from current page');
+        }
+        return `content_${id}`;
+    },
+};
+
+export const parseKey = {
+    metadata: (key: string) => key.replace('metadata_', ''),
+    content: (key: string) => key.replace('content_', ''),
+};

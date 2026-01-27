@@ -10,33 +10,42 @@ import { Placeholder } from '@tiptap/extensions';
 import { Markdown } from '@tiptap/markdown';
 import StarterKit from '@tiptap/starter-kit';
 import { all, createLowlight } from 'lowlight';
-import collapseActionsHtml from '../html/action-toggle/collapse-actions.html';
-import expandActionsHtml from '../html/action-toggle/expand-actions.html';
-import redCircleHtml from '../html/red-circle.html';
-import sidepanelHtml from '../html/sidepanel.html';
-import copiedStatusHtml from '../html/status-text/copied-status.html';
-import loadedStatusHtml from '../html/status-text/loaded-status.html';
-import savedStatusHtml from '../html/status-text/saved-status.html';
-import savingStatusHtml from '../html/status-text/saving-status.html';
-import { globals } from './global';
-import { MyCommandManager } from './nodes/commands';
-import { Timestamp } from './nodes/timestamp';
-import { SELECTORS } from './selectors';
-import { MenuButtonRule } from './types';
+import collapseActionsHtml from '../../html/action-toggle/collapse-actions.html';
+import expandActionsHtml from '../../html/action-toggle/expand-actions.html';
+import redCircleHtml from '../../html/red-circle.html';
+import sidepanelHtml from '../../html/sidepanel.html';
+import copiedStatusHtml from '../../html/status-text/copied-status.html';
+import loadedStatusHtml from '../../html/status-text/loaded-status.html';
+import savedStatusHtml from '../../html/status-text/saved-status.html';
+import savingStatusHtml from '../../html/status-text/saving-status.html';
+import { MyCommandManager } from '../nodes/commands';
+import { Timestamp } from '../nodes/timestamp';
+import {
+    ExtensionMessage,
+    ExtensionMessageDeleteRow,
+    ExtensionMessageType,
+    MenuButtonRule,
+    VideoMetadata,
+} from '../types/interfaces';
 import {
     attachScrollFade,
     duringTransition,
     formatShortcutForOS,
     formatTimecode,
+    generateKey,
     getContentSize,
     getElementByClass,
+    getVideoMetadata,
     getVideoScreenshot,
     getVideoTime,
     imageTypes,
     isEmptyHtml,
     loadHtmlIntoElement,
+    readVideoMetadata,
     uploadFile,
-} from './util';
+} from '../util';
+import { globals } from './global';
+import { SELECTORS } from './selectors';
 
 export function attachSidepanel(): void {
     const video = document.querySelector(SELECTORS.YT.SELECTORS.VIDEO)!;
@@ -147,7 +156,7 @@ export async function setupSidepanelOpenClose(): Promise<void> {
     });
 
     // Setup open/close of sidepanel.
-    const close = () => {
+    const close = async () => {
         globals.open = false;
         if (globals.appeared) {
             clearAutoHide();
@@ -169,7 +178,7 @@ export async function setupSidepanelOpenClose(): Promise<void> {
         extContainer.addEventListener('mouseleave', hide);
         duringTransition(250, () => window.dispatchEvent(new Event('resize')));
     };
-    const open = () => {
+    const open = async () => {
         extContainer.removeEventListener('mousemove', appear);
         extContainer.removeEventListener('mouseleave', hide);
         clearAutoHide();
@@ -256,7 +265,6 @@ export async function setupSidepanelResize(): Promise<void> {
 export async function setupSidepanelEditor(): Promise<void> {
     const target = document.querySelector('.content');
     const contentContainer = document.getElementById('content-container')!;
-
     const lowlight = createLowlight(all);
 
     // Setup editor.
@@ -453,32 +461,70 @@ export async function setupSidepanelEditor(): Promise<void> {
         fadeSize: 24,
     });
 
+    // Save editor globally.
+    globals.editor = editor;
+}
+
+export async function setupSidepanelLoadAndSave(): Promise<void> {
     // Save & edit content across different URLs.
+    const editor = globals.editor!;
     const statusElement = document.getElementById('status')!;
     const sizeElement = document.getElementById('size-text')!;
     const bottomRightBadge = document.getElementById('bottom-right-badge')!;
     let onUpdate: ({ editor }: { editor: Editor }) => Promise<void>;
-    let key: string | null = null;
     let savedUrl: string | null = null;
+
+    // Track link changes via `href`/
     new MutationObserver(async () => {
         if (chrome.storage != null) {
             let currUrl = location.href;
+            /*
+                Ensure page...
+                    1. Has changed
+                    2. Is a youtube video watch page.
+            */
             if (savedUrl != null && savedUrl === currUrl) return;
+            if (
+                !/^https:\/\/www\.youtube\.com\/watch(\?.*)?$/.test(
+                    window.location.href,
+                )
+            )
+                return;
 
-            // New 'href' identified, track url and reload content.
+            // New 'href' identified, track url, used state, and reload content.
             savedUrl = currUrl;
-            key = `${globals.storageKeyPrefix}${location.href}`;
+            globals.used = false;
+            const metadataKey = generateKey.metadata();
+            const contentKey = generateKey.content();
+            const fetch = async (
+                key: string,
+            ): Promise<string | VideoMetadata | null> => {
+                let result = await chrome.storage.local.get(key);
+                if (!result) return null;
+                const { [key]: output } = result as { [key: string]: string };
+                return output;
+            };
 
             // Load initial content.
-            const { [key]: content }: { [key: string]: string } =
-                await chrome.storage.local.get(key);
-            // Consider empty HTML as new notes.
+            const content = (await fetch(contentKey)) as string | null;
             if (!isEmptyHtml(content ?? '')) {
+                // Count load as a 'use';
+                const metadata = await readVideoMetadata();
+                if (metadata && !globals.used) {
+                    metadata.uses += 1;
+                    await chrome.storage.local.set({
+                        [metadataKey!]: metadata,
+                    });
+                    globals.used = true;
+                }
+
+                // Existing html.
                 editor.chain().setContent(content, { emitUpdate: false }).run();
                 bottomRightBadge.innerHTML = redCircleHtml;
                 statusElement.innerHTML = loadedStatusHtml;
-                sizeElement.innerHTML = getContentSize(content);
+                sizeElement.innerHTML = getContentSize(content ?? '');
             } else {
+                // Empty html.
                 editor.chain().setContent('', { emitUpdate: false }).run();
                 bottomRightBadge.innerHTML = '';
                 statusElement.innerHTML = 'Welcome to YouNotes!';
@@ -505,13 +551,27 @@ export async function setupSidepanelEditor(): Promise<void> {
                     statusElement.innerHTML = savingStatusHtml;
                     saveTimeout = window.setTimeout(async () => {
                         if (!isEmptyHtml(currContent ?? '')) {
+                            const contentSize = getContentSize(currContent);
+                            const existingMetadata = await readVideoMetadata();
+                            const freshMetadata = await getVideoMetadata();
+                            freshMetadata.size = contentSize;
+                            freshMetadata.uses = existingMetadata?.uses ?? 1;
                             await chrome.storage.local.set({
-                                [key!]: currContent,
+                                [metadataKey!]: freshMetadata,
+                            });
+                            await chrome.storage.local.set({
+                                [contentKey!]: currContent,
                             });
                             bottomRightBadge.innerHTML = redCircleHtml;
-                            sizeElement.innerHTML = getContentSize(currContent);
+                            sizeElement.innerHTML = contentSize;
                         } else {
-                            await chrome.storage.local.remove(key!);
+                            await chrome.storage.local.remove(contentKey!);
+                            await chrome.storage.local.remove(metadataKey!);
+                            await chrome.runtime.sendMessage({
+                                type: ExtensionMessageType.DELETE_ROW,
+                                url: location.href,
+                            } as ExtensionMessageDeleteRow);
+
                             bottomRightBadge.innerHTML = '';
                             sizeElement.innerHTML = '0 B';
                         }
@@ -523,9 +583,6 @@ export async function setupSidepanelEditor(): Promise<void> {
             editor.on('update', onUpdate);
         }
     }).observe(document, { childList: true, subtree: true });
-
-    // Save editor globally.
-    globals.editor = editor;
 }
 
 export async function setupSidepanelMenubar(): Promise<void> {
@@ -901,16 +958,16 @@ export async function setupSidepanelHotkeys(): Promise<void> {
     );
 
     // Listen for keydown events.
-    document.addEventListener('keydown', (event) => {
+    document.addEventListener('keydown', async (event) => {
         switch (event.key) {
             case 'Q':
             case 'q': {
                 if (globals.open) {
                     editor.commands.blur();
-                    globals.callbacks.close!();
+                    await globals.callbacks.close!();
                     break;
                 } else {
-                    globals.callbacks.open!();
+                    await globals.callbacks.open!();
                     // setTimeout(() => {
                     //     editor.commands.focus();
                     // }, 250);
@@ -934,6 +991,10 @@ export async function setupSidepanelHotkeys(): Promise<void> {
 
 export async function watchSidepanelChanges(): Promise<void> {
     let sidepanelCtn = document.getElementById('sidepanel-ctn')!;
+    const content = document.querySelector('.content')!;
+    const focusIndicator = document.getElementById('focus-indicator');
+    const focusText = document.getElementById('focus-text')!;
+    const focusHotkey = document.getElementById('focus-key')!;
 
     // Setup logo click event.
     const extLogo = document.getElementById('ext-logo')!;
@@ -943,14 +1004,13 @@ export async function watchSidepanelChanges(): Promise<void> {
         });
     });
 
-    // React to sidepanel container height.
+    // React to sidepanel container changes.
     let contentBuffer = document.getElementById('content-buffer')!;
     new ResizeObserver(() => {
-        // Calculate new editor buffer based on sidepanel container.
         const rect = sidepanelCtn.getBoundingClientRect();
-        const newBuffer = rect.height * 0.5;
 
-        // Apply.
+        // Apply new buffer.
+        const newBuffer = rect.height * 0.5;
         contentBuffer.style.height = newBuffer + 'px';
         globals.editor!.view.setProps({
             scrollMargin: {
@@ -960,13 +1020,16 @@ export async function watchSidepanelChanges(): Promise<void> {
                 left: 0,
             },
         });
+
+        // Calc visiblity of focus indicator.
+        if (rect.width < 300) {
+            focusText.classList.add('d-none');
+        } else {
+            focusText.classList.remove('d-none');
+        }
     }).observe(sidepanelCtn);
 
     // React to sidepanel container focus.
-    const content = document.querySelector('.content')!;
-    const focusIndicator = document.getElementById('focus-indicator');
-    const focusText = document.getElementById('focus-text')!;
-    const focusHotkey = document.getElementById('focus-key')!;
     focusHotkey.textContent = formatShortcutForOS(['Ctrl', 'Enter']);
     const menuBarItems = [
         ...Array.from(document.getElementsByClassName('menu-icon')),
@@ -991,4 +1054,26 @@ export async function watchSidepanelChanges(): Promise<void> {
     });
     // disable();
     focusText.textContent = 'Focus';
+}
+
+export async function listenToPopup() {
+    chrome.runtime.onMessage.addListener(
+        async (message: ExtensionMessage, sender, sendResponse) => {
+            if (message.source != 'content_script') {
+                switch (message.type) {
+                    case ExtensionMessageType.DELETE_ROW: {
+                        const typed: ExtensionMessageDeleteRow =
+                            message as ExtensionMessageDeleteRow;
+                        console.log('rannnnn');
+                        if (location.href === typed.url) {
+                            const editor = globals.editor!;
+                            editor.commands.clearContent();
+                        }
+                        break;
+                    }
+                }
+            }
+            return true;
+        },
+    );
 }

@@ -1,8 +1,83 @@
 <html>
     <head>
         <title>YouNotes</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="../css/bootstrap-utilities.min.css" />
+        <link rel="stylesheet" href="../css/vars.css" />
+        <link rel="stylesheet" href="../css/popup.css" />
+        <link rel="stylesheet" href="../css/fontawesome/css/fontawesome.css" />
+        <link rel="stylesheet" href="../css/fontawesome/css/solid.css" />
+        <link rel="stylesheet" href="../css/fontawesome/css/brands.css" />
+        <!-- JS -->
+         <script src="../popup.js"></script>
     </head>
-    <body>
-        Welcome to younotes!
+    <body
+        style="width: 350px; height: 550px"
+        class="d-flex flex-column align-items-center p-2 dark-mode">
+        <div id="popup-overlay" class="popup-overlay hidden">
+            <div id="dialog" class="dialog">
+                <!-- Overlay -->
+            </div>
+        </div>
+        <div
+            id="buttons"
+            class="w-100 d-flex flex-row justify-content-between gap-3">
+            <div class="d-flex flex-row">
+                <button id="info-btn" data-tooltip="About" class="icon-btn">
+                    <i class="fa-solid fa-info fa-xl"></i>
+                </button>
+            </div>
+            <div class="d-flex flex-row justify-content-end gap-3">
+                <button data-tooltip="Chrome Web Store page" class="icon-btn">
+                    <i class="fa-brands fa-chrome fa-xl"></i>
+                </button>
+                <button id="email-btn" data-tooltip="Request a feature, submit a bug, etc" class="icon-btn">
+                    <i class="fa-solid fa-envelope fa-xl"></i>
+                </button>
+                <button data-tooltip="Settings" class="icon-btn" disabled>
+                    <i class="fa-solid fa-gear fa-xl"></i>
+                </button>
+            </div>
+        </div>
+        <div id="header" class="d-flex my-2 flex-row justify-content-center align-items-center gap-2">
+            <img src="../images/younotes_logo.png" style="height: 100px;"></img>
+            <div class="d-flex flex-column">
+                <span class="fs-2">YouNotes</span>
+                <span style="opacity: 0.8" class="options-text fst-italic">Write and save notes on Youtube</span>
+            </div>
+        </div>
+        <div id="search-grid" class="d-flex flex-column h-100 w-100 mt-4">
+            <div class="w-100 d-flex flex-row justify-content-between mb-2">
+                <div data-tooltip="Search" class="d-flex flex-row align-items-center">
+                    <i class="fa-solid fa-magnifying-glass fa-lg me-2"></i>
+                    <input placeholder="Search videos..." id="search-field" class="component"></input>
+                </div>
+                <select data-tooltip="Sort" id="sort-field" class="component" style="width: 120px">
+                    <option value="MOST_RECENT">Most Recent</option>
+                    <option value="MOST_ACTIVE">Most Active</option>
+                    <option value="A_Z">A to Z</option>
+                    <option value="LARGEST_SIZE">Most Storage</option>
+                    <option value="OLDEST">Oldest</option>
+                </select>
+            </div>
+            <div id="search-grid-contents" class="overflow-auto text-bg flex-grow-1 d-flex flex-column gap-2 p-2">
+                <!-- Grid content -->
+            </div>
+            <div class="w-100 d-flex flex-row justify-content-between align-items-center my-2">
+                <div data-tooltip-align="top" data-tooltip="Count" class="px-2 d-flex flex-row gap-4">
+                    <span id="video-interval"></span>
+                    <span id="video-count"></span>
+                </div>
+                <div id="page-nav" class="d-flex flex-row align-items-center me-1 gap-2">
+                    <button data-tooltip-align="top" data-tooltip="Previous page" class="icon-btn" id="prevPage">
+                        <i class="fa-solid fa-angle-left fa-xl"></i>
+                    </button>
+                    <span class="p-2" data-tooltip-align="top" data-tooltip="Current page" id="pageNumber"></span>
+                    <button data-tooltip-align="top" data-tooltip="Next page" class="icon-btn" id="nextPage">
+                        <i class="fa-solid fa-angle-right fa-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

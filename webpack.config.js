@@ -1,13 +1,15 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { watch } = require('fs');
+const webpack = require('webpack');
 
 module.exports = {
-    mode: 'development', // or 'production'
+    mode: 'production', // or 'production'
     devtool: 'source-map', // No eval, to support webpack with Chrome
     entry: {
-        content: './src/index.ts',
-        background: './src/background.ts',
+        sidepanel: './src/ts/sidepanel/index.ts',
+        popup: './src/ts/popup/index.ts',
+        background: './src/ts/background.ts',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -37,7 +39,11 @@ module.exports = {
                 { from: 'src/css', to: 'css' },
                 { from: 'src/manifest.json', to: '.' },
                 { from: 'src/images', to: 'images' },
+                { from: 'THIRD_PARTY_NOTICES.txt', to: '.' },
             ],
+        }),
+        new webpack.BannerPlugin({
+            banner: '© 2026 Ant N. All rights reserved, excluding outlined third-party libraries.',
         }),
     ],
     watch: true,

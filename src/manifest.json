@@ -1,6 +1,6 @@
 {
     "name": "YouNotes",
-    "description": "Take video notes directly on Youtube!",
+    "description": "Write and save notes on Youtube",
     "version": "1.0",
     "manifest_version": 3,
     "action": {
@@ -12,7 +12,7 @@
         "48": "images/icons/younotes_48.png",
         "128": "images/icons/younotes_128.png"
     },
-    "permissions": ["commands", "storage"],
+    "permissions": ["commands", "storage", "tabs"],
     "commands": {
         "reload": {
             "suggested_key": {
@@ -28,7 +28,7 @@
     },
     "content_scripts": [
         {
-            "js": ["content.js"],
+            "js": ["sidepanel.js"],
             "css": [
                 "css/vars.css",
                 "css/tiptap.css",

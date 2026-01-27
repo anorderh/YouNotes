@@ -8,16 +8,20 @@ type GlobalValuesType = {
         lastWidth: number | null;
         min: number;
     };
-    appeared: boolean;
-    open: boolean;
-    actionsExpanded: boolean;
-    storageKeyPrefix: string;
+    appeared: boolean; // Flag for if side tab is visible.
+    open: boolean; // Flag for if sidepanel is open
+    actionsExpanded: boolean; // Flag for if actions are expanded
+    used: boolean; // Flag for if YouNotes was used on the current page.
     editor?: Editor;
     callbacks: {
         open?: () => void;
         close?: () => void;
         expandActions?: () => void;
         collapseActions?: () => void;
+        load?: (input: string) => void;
+        save?: (input: string) => void;
+        clear?: () => void;
+        delete?: () => void;
     };
 };
 
@@ -32,6 +36,6 @@ export const globals: GlobalValuesType = {
     appeared: false,
     open: false,
     actionsExpanded: false,
-    storageKeyPrefix: 'yt-notes:',
+    used: false,
     callbacks: {},
 };
