@@ -1,6 +1,7 @@
 import { Editor } from '@tiptap/core';
 
 type GlobalValuesType = {
+    version: string;
     debug: boolean;
     width: {
         lowerLimit: number | null;
@@ -26,6 +27,7 @@ type GlobalValuesType = {
 };
 
 export const globals: GlobalValuesType = {
+    version: '1.0.1',
     debug: false,
     width: {
         lowerLimit: null,

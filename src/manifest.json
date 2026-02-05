@@ -1,7 +1,7 @@
 {
     "name": "YouNotes",
     "description": "Write and save notes on Youtube",
-    "version": "1.0",
+    "version": "1.0.1",
     "manifest_version": 3,
     "action": {
         "default_popup": "html/popup.html"
@@ -12,16 +12,7 @@
         "48": "images/icons/younotes_48.png",
         "128": "images/icons/younotes_128.png"
     },
-    "permissions": ["commands", "storage", "tabs"],
-    "commands": {
-        "reload": {
-            "suggested_key": {
-                "default": "Ctrl+R",
-                "mac": "Command+R"
-            },
-            "description": "Reload the extension."
-        }
-    },
+    "permissions": ["commands", "storage", "tabs", "unlimitedStorage"],
     "background": {
         "service_worker": "background.js",
         "type": "module"

@@ -18,6 +18,7 @@ import copiedStatusHtml from '../../html/status-text/copied-status.html';
 import loadedStatusHtml from '../../html/status-text/loaded-status.html';
 import savedStatusHtml from '../../html/status-text/saved-status.html';
 import savingStatusHtml from '../../html/status-text/saving-status.html';
+import { globals } from '../global';
 import { MyCommandManager } from '../nodes/commands';
 import { Timestamp } from '../nodes/timestamp';
 import {
@@ -44,7 +45,6 @@ import {
     readVideoMetadata,
     uploadFile,
 } from '../util';
-import { globals } from './global';
 import { SELECTORS } from './selectors';
 
 export function attachSidepanel(): void {
@@ -277,6 +277,9 @@ export async function setupSidepanelEditor(): Promise<void> {
                 },
                 codeBlock: false,
                 listKeymap: false,
+                dropcursor: {
+                    color: '#38383a',
+                },
             }),
             TaskItem.configure({
                 nested: true,
@@ -290,7 +293,7 @@ export async function setupSidepanelEditor(): Promise<void> {
             Timestamp,
             Image.configure({
                 allowBase64: true,
-                inline: true,
+                inline: false,
                 resize: {
                     enabled: true,
                     alwaysPreserveAspectRatio: true,
@@ -310,12 +313,14 @@ export async function setupSidepanelEditor(): Promise<void> {
                         fileReader.onload = () => {
                             currentEditor
                                 .chain()
-                                .insertContentAt(pos, {
-                                    type: 'image',
-                                    attrs: {
-                                        src: fileReader.result,
+                                .insertContent([
+                                    {
+                                        type: 'image',
+                                        attrs: {
+                                            src: fileReader.result,
+                                        },
                                     },
-                                })
+                                ])
                                 .focus()
                                 .run();
                         };
@@ -329,15 +334,17 @@ export async function setupSidepanelEditor(): Promise<void> {
                         fileReader.onload = () => {
                             currentEditor
                                 .chain()
-                                .insertContentAt(
-                                    currentEditor.state.selection.anchor,
+                                .insertContent([
                                     {
                                         type: 'image',
                                         attrs: {
                                             src: fileReader.result,
                                         },
                                     },
-                                )
+                                    {
+                                        type: 'paragraph',
+                                    },
+                                ])
                                 .focus()
                                 .run();
                         };
@@ -376,13 +383,18 @@ export async function setupSidepanelEditor(): Promise<void> {
                             editor
                                 .chain()
                                 .deleteRange(range)
-                                .insertContent({
-                                    type: 'image',
-                                    attrs: {
-                                        src: getVideoScreenshot(),
+                                .insertContent([
+                                    {
+                                        type: 'image',
+                                        attrs: {
+                                            src: getVideoScreenshot(),
+                                        },
                                     },
-                                })
-                                .focus()
+                                    {
+                                        type: 'paragraph',
+                                    },
+                                ])
+                                .focus(editor.state.selection.to + 1)
                                 .run();
                         },
                     },
@@ -413,13 +425,18 @@ export async function setupSidepanelEditor(): Promise<void> {
                             editor
                                 .chain()
                                 .deleteRange(range)
-                                .insertContent({
-                                    type: 'image',
-                                    attrs: {
-                                        src: dataUrl,
+                                .insertContent([
+                                    {
+                                        type: 'image',
+                                        attrs: {
+                                            src: dataUrl,
+                                        },
                                     },
-                                })
-                                .focus()
+                                    {
+                                        type: 'paragraph',
+                                    },
+                                ])
+                                .focus(editor.state.selection.to + 1)
                                 .run();
                         },
                     },
@@ -884,13 +901,18 @@ export async function setupSidepanelActions(): Promise<void> {
             const dataUrl = await uploadFile(imageTypes);
             editor
                 .chain()
-                .insertContent({
-                    type: 'image',
-                    attrs: {
-                        src: dataUrl,
+                .insertContent([
+                    {
+                        type: 'image',
+                        attrs: {
+                            src: dataUrl,
+                        },
                     },
-                })
-                .focus()
+                    {
+                        type: 'paragraph',
+                    },
+                ])
+                .focus(editor.state.selection.to + 1)
                 .run();
         });
     document
@@ -903,13 +925,18 @@ export async function setupSidepanelActions(): Promise<void> {
         ?.addEventListener('click', async () => {
             editor
                 .chain()
-                .insertContentAt(editor.state.selection.anchor, {
-                    type: 'image',
-                    attrs: {
-                        src: getVideoScreenshot(),
+                .insertContent([
+                    {
+                        type: 'image',
+                        attrs: {
+                            src: getVideoScreenshot(),
+                        },
                     },
-                })
-                .focus()
+                    {
+                        type: 'paragraph',
+                    },
+                ])
+                .focus(editor.state.selection.to + 1)
                 .run();
         });
     document

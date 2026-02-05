@@ -1,4 +1,4 @@
-import { globals } from './sidepanel/global';
+import { globals } from './global';
 import { SELECTORS } from './sidepanel/selectors';
 import { VideoMetadata } from './types/interfaces';
 

@@ -1,3 +1,4 @@
+import { globals } from '../global';
 import {
     ExtensionMessageDeleteRow,
     ExtensionMessageType,
@@ -297,11 +298,11 @@ export async function setupPopupButtons() {
                         <img src="../images/younotes_logo.png" style="height: 40px;"></img>
                         <span>YouNotes</span>
                     </span>
-                    <span class="text-center">Version 1.0</span>
+                    <span class="text-center">Version ${globals.version}</span>
                     <span>This extension does not collect or transmit any personal data.</span>
                     <div class="d-flex flex-column gap-1">
                         <span class="fw-semibold">Chrome Web Store page:</span>
-                        <span>Placeholder</span>
+                        <span style="overflow-wrap: anywhere;">https://chromewebstore.google.com/detail/gehcckelgmjikeplalgonkhdojacadmg</span>
                     </div>
                     <div class="d-flex flex-column gap-1">
                         <span class="fw-semibold">Email Support:</span>
@@ -328,7 +329,13 @@ export async function setupPopupButtons() {
         });
     });
 
-    // Setup email button.
+    // Setup header buttons
+    const webStoreBtn = document.getElementById('webstore-btn')!;
+    webStoreBtn.addEventListener('click', async () => {
+        await chrome.tabs.create({
+            url: 'https://chromewebstore.google.com/detail/gehcckelgmjikeplalgonkhdojacadmg',
+        });
+    });
     const emailBtn = document.getElementById('email-btn')!;
     emailBtn.addEventListener('click', async () => {
         await chrome.tabs.create({
