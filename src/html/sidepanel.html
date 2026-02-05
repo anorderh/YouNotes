@@ -1,17 +1,8 @@
 <div id="sidepanel-ctn" class="sidepanel-ctn bs">
     <button data-tooltip="YouNotes" data-tooltip-align="left" data-tooltip-hotkey="Q" id="sidepanel-btn" class="sidepanel-btn shadow-sm btn-react">
-        <div id="sidepanel-icon" class="sidepanel-icon sidepanel-toggle">
-            <svg
-                style="width: 18px; height: 18px"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512">
-                <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                <path
-                    d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152L0 424c0 48.6 39.4 88 88 88l272 0c48.6 0 88-39.4 88-88l0-112c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 112c0 22.1-17.9 40-40 40L88 464c-22.1 0-40-17.9-40-40l0-272c0-22.1 17.9-40 40-40l112 0c13.3 0 24-10.7 24-24s-10.7-24-24-24L88 64z" />
-            </svg>
-            <div id="bottom-right-badge" class="bottom-right-badge">
-                <div class="red-circle"></div>
-            </div>
+        <!-- Sidepanel tab icon -->
+        <div style="filter: brightness(150%)" id="sidepanel-icon" class="sidepanel-icon sidepanel-toggle">
+            <img id="sidepanel-indicator" style="width: 30px; height: 30px"></img>
         </div>
     </button>
     <div id="resize-handle" class="resize-handle"></div>
@@ -431,11 +422,11 @@
                 </div>
                 <div
                     class="w-100 px-5 my-3 d-flex flex-row justify-content-between align-items-center"
-                    style="height: 60px">
+                    style="height: 40px">
                     <div data-tooltip-align="top" data-tooltip="Storage" id="size-status" title="Manage storage in popup" class="d-flex flex-row gap-4 align-items-center me-4">
-                        <img
-                            id="ext-logo"
-                            class="btn-unreact shadow"></img>
+                        <div style="width: 16px; height: 16px" class="bottom-bar-icon mb-2">
+                            <svg class="bottom-bar-icon" fill="grey" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M64 32C28.7 32 0 60.7 0 96L0 260.1C18.1 247.4 40.2 240 64 240l320 0c23.8 0 45.9 7.4 64 20.1L448 96c0-35.3-28.7-64-64-64L64 32zM448 352c0-35.3-28.7-64-64-64L64 288c-35.3 0-64 28.7-64 64l0 64c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-64zM224 384a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm128-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>    
+                        </div>
                         <span
                             id="size-text"
                             class="fs-5 status-text text-nowrap"></span>

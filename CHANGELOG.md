@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Version 1.0.2
+
+- Fixed injection issues where moviePlayer was held outside of DOM
+- Add icon for each note record
+- Add animated tab icon
+- Add 'Help' modal
+- Tweak paragraph and text content spacing
+
 ## Version 1.0.1
 
 - Add dropcursor

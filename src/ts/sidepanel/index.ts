@@ -45,8 +45,8 @@ import {
         observe.disconnect();
 
         // Inject.
-        await attachSidepanel();
-        await loadImages();
+        attachSidepanel();
+        loadImages();
         await setupSidepanelOpenClose();
         await setupSidepanelResize();
         await setupSidepanelEditor();

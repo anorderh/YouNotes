@@ -11,7 +11,7 @@
     position: relative; /* makes absolute inside it relative */
     display: inline-block;
     fill: rgb(238, 238, 238);
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+    /* filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6)); */
 }
 
 .sidepanel-toggle {
@@ -188,6 +188,15 @@
 #content-container {
     width: 100%;
     height: 100%;
+}
+
+#sidepanel-icon {
+    transition: filter 300ms ease;
+}
+
+#sidepanel-indicator {
+    filter: grayscale(100%);
+    transition: filter 300ms ease;
 }
 
 .menu-bar {

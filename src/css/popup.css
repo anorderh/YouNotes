@@ -120,6 +120,14 @@ body {
     font-family: 'Roboto', Arial, sans-serif;
 }
 
+.text-yt {
+    color: var(--yt-red);
+}
+
+.text-help * {
+    line-height: 1.35;
+}
+
 /* Modal functionality */
 /* Fullscreen overlay */
 .popup-overlay {
@@ -131,7 +139,7 @@ body {
     justify-content: center;
     z-index: 9999;
     transition: opacity 0.15s ease;
-    opacity: 0;
+    opacity: 1;
 }
 
 /* Dialog box */
@@ -246,4 +254,22 @@ button.component {
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+.hotkey-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* subtle shadow */
+    /* font-family: monospace; */
+    font-size: 0.9em; /* slightly smaller */
+    color: white;
+    background-color: transparent;
+}
+
+.body-text {
+    font-size: 13px;
 }

@@ -60,41 +60,72 @@ export async function getAllVideosMetadata(): Promise<VideoMetadata[]> {
 
 export function getRowHtml(metadata: VideoMetadata) {
     return `
-        <div class="search-grid-row rounded shadow-sm p-3 clickable">
-            <div class="d-flex flex-column">
-                <div class="d-flex flex-row justify-content-between">
-                    <span style="line-height: 22px" class="fs-6 mb-2 fw-semibold">${metadata.title}</span>
-                    <div title="Actions" style="height: min-content;" class="d-flex flex-row gap-3 ms-4">
-                        <btn data-tooltip="Delete" class="icon-btn">
-                            <i class="fa-solid fa-trash fa-xl" id="delete"></i>
-                        </btn>
-                    </div>
-                </div>
-                <div class="d-flex flex-row justify-content-between mt-4 mx-2">
-                    <div class="d-flex flex-column gap-2 mx-2">
-                        <span data-tooltip="Channel Name" class="normal-text fst-italic">
-                            <i class="fa-solid fa-user fa-md me-2"></i>
-                            ${metadata.channelName}
-                        </span>
-                        <span data-tooltip="Duration" class="normal-text">
-                            <i class="fa-solid fa-clock fa-md me-2"></i>
-                            ${metadata.duration}
-                        </span>
-                    </div>
-                    <div title="Info" class="d-flex flex-column gap-2 mx-2">
-                        <span data-tooltip="Last Edited" class="normal-text text-nowrap">
-                            <i class="fa-solid fa-pen fa-md me-2"></i>
-                            ${getDate(metadata.lastEdit).toLocaleDateString()}
-                        </span>
-                        <span data-tooltip="Size" class="normal-text">
-                            <i class="fa-solid fa-hard-drive fa-md me-2"></i>
-                            ${metadata.size}
-                        </span>
-                    </div>
-                </div>
-            </div>
+    <div class="search-grid-row rounded shadow-sm p-3 clickable">
+
+      <div class="d-flex flex-column">
+
+        <!-- Title row -->
+        <div class="d-flex align-items-start justify-content-between">
+
+          <div class="d-flex align-items-start gap-2">
+            <!-- Video + notes indicator -->
+            <img style="width: 25px; height: 25px;" src="../images/younote_single.png"></img>
+
+            <span class="fs-6 fw-semibold"
+                  style="line-height: 22px">
+              ${metadata.title}
+            </span>
+          </div>
+
+          <!-- Actions -->
+          <div class="d-flex align-items-center gap-3 ms-3">
+            <button id="delete" type="button"
+                    class="icon-btn"
+                    data-tooltip="Delete">
+              <i class="fa-solid fa-trash fa-lg"></i>
+            </button>
+          </div>
+
         </div>
-    `;
+
+        <!-- Metadata row -->
+        <div class="d-flex justify-content-between mt-3 mx-2">
+
+          <!-- Left column -->
+          <div class="d-flex flex-column gap-2">
+            <span data-tooltip="Channel Name"
+                  class="normal-text fst-italic">
+              <i class="fa-solid fa-user me-2"></i>
+              ${metadata.channelName}
+            </span>
+
+            <span data-tooltip="Duration"
+                  class="normal-text">
+              <i class="fa-solid fa-clock me-2"></i>
+              ${metadata.duration}
+            </span>
+          </div>
+
+          <!-- Right column -->
+          <div class="d-flex flex-column align-items-start gap-2 text-end">
+            <span data-tooltip="Last Edited"
+                  class="normal-text text-nowrap">
+              <i class="fa-solid fa-pen me-2"></i>
+              ${getDate(metadata.lastEdit).toLocaleDateString()}
+            </span>
+
+            <span data-tooltip="Size"
+                  class="normal-text">
+              <i class="fa-solid fa-hard-drive me-2"></i>
+              ${metadata.size}
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  `;
 }
 
 export async function calculateRows(): Promise<void> {
@@ -187,8 +218,8 @@ export async function render() {
     searchGridContents.innerHTML = '';
     if (popupState.rows.length == 0) {
         const el = loadHtmlIntoElement(`
-            <div class="h-100 w-100 d-flex justify-content-center align-items-center">
-                <span style="opacity: 0.8" class="options-text fst-italic">No notes found</span>
+            <div class="h-100 w-100 d-flex flex-column justify-content-center align-items-center gap-1">
+                <span style="opacity: 0.8" class="options-text fst-italic text-center">No notes found.</span>
             </div>`)!;
         searchGridContents.append(el);
     } else {
@@ -288,11 +319,11 @@ export async function setupPopupButtons() {
         }
     });
 
-    // Setup license button.
+    // Setup info button.
     const infoBtn = document.getElementById('info-btn')!;
     infoBtn.addEventListener('click', () => {
         const modal = showModal(`
-            <div style="width: 200px" class="d-flex flex-column p-2 gap-3">
+            <div style="width: 225px" class="d-flex flex-column p-2 gap-3 body-text">
                     <span class="d-flex flex-row justify-content-center align-items-center gap-2">
                         <img src="../images/younotes_logo.png" style="height: 40px;"></img>
                         <span>YouNotes</span>
@@ -321,11 +352,177 @@ export async function setupPopupButtons() {
                     <span class="text-center">Developed by <br/>Anthony Norderhaug &copy; 2026</span>
                 </div>
             `);
+        // Setup license button.
         const licenseBtn = modal.querySelector('#license-btn')!;
         licenseBtn.addEventListener('click', () => {
             const url = chrome.runtime.getURL('THIRD_PARTY_NOTICES.txt');
             window.open(url);
         });
+    });
+
+    // Setup help button.
+    const helpBtn = document.getElementById('help-btn')!;
+    helpBtn.addEventListener('click', () => {
+        showModal(`
+            <div style="width: 225px; height: 70%" class="p-2 gap-3 body-text">
+                    <div style="height: 175px" class="w-100 position-relative overflow-hidden">
+                        <img class="position-absolute" style="width: 100px; height: 100px; left: 10px" src="../images/younotes_logo.png"></img>
+                        <img class="position-absolute" style="height: 175px; right: 10px" src="../images/help_stickman.png"></img>
+                    </div>
+                    <div class="w-100 d-flex flex-column align-items-center gap-3 py-2 pb-4 text-help">
+                        <span class="fs-5 text-center fw-bold">What is this?</span>
+                        <span class="w-100 text-center">
+                            <b>You<span class="text-yt">Notes</span></b> is a Chrome Extension for... you guessed it, <u>writing notes</u>! 
+                        </span>
+                        <span class="w-100">
+                            You can access it by opening a <code>youtube.com/watch</code> URL, hovering over the video player, and pressing the button on the right-hand side.
+                        </span>
+                        <span class="w-100">
+                            This injects a Rich Text, WYSIWYG editor into Youtube's video player that can write all sorts of content, from:
+                            <ul class="d-flex flex-column gap-1 pb-0">
+                                <li>Images</li>
+                                <li>Links</li>
+                                <li>Interactive Timestamps</li>
+                                <li>Video Screenshots</li>
+                                <li>Code Snippets (Syntax for 190+ languages!)</li>
+                                <li>To-Dos</li>
+                                <li>Headings</li>
+                                <li>Bullet & Numbered lists</li>
+                                <li>Bold, Italic, and Underline</li>
+                                <li>Exponents and subscripts </li>
+                                <li>...or just plain text</li>
+                            </ul>
+                        </span>
+                        <span class="w-100 mb-2">
+                            Everything written gets <b>saved to the browser's local storage</b>, so when you revisit the video, your notes will still be there :)
+                        </span>
+                        <span class="fs-5">
+                            Keyboard Shortcuts
+                        </span>
+                        <div style="width: 75%" class="d-flex flex-column gap-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Toggle YouNotes</span>
+                                <div class="hotkey-box">Q</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Toggle Actions</span>
+                                <div class="hotkey-box">A</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Undo</span>
+                                <div class="hotkey-box">Ctrl+Z</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Redo</span>
+                                <div class="hotkey-box">Ctrl+Shift+Z</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Heading 1</span>
+                                <div class="hotkey-box">#</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Heading 2</span>
+                                <div class="hotkey-box">##</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Heading 3</span>
+                                <div class="hotkey-box">###</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Bullet List</span>
+                                <div class="hotkey-box">-</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Ordered List</span>
+                                <div class="hotkey-box">1.</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>To Do</span>
+                                <div class="hotkey-box">[ ]</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Blockquote</span>
+                                <div class="hotkey-box">&gt;</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Code Block</span>
+                                <div class="hotkey-box">${'```[lang]'}</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Bold</span>
+                                <div class="hotkey-box">Ctrl+B</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Italic</span>
+                                <div class="hotkey-box">Ctrl+I</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Strikethrough</span>
+                                <div class="hotkey-box">~~[...]~~</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Superscript</span>
+                                <div class="hotkey-box">Ctrl+.</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Subscript</span>
+                                <div class="hotkey-box">Ctrl+,</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Code</span>
+                                <div class="hotkey-box">${'`[...]`'}</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Underline</span>
+                                <div class="hotkey-box">Ctrl+U</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Highlight</span>
+                                <div class="hotkey-box">==[...]==</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Timestamp</span>
+                                <div class="hotkey-box">/ts</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Screenshot</span>
+                                <div class="hotkey-box">/ss</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Date</span>
+                                <div class="hotkey-box">/date</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Upload Image</span>
+                                <div class="hotkey-box">/img</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
     });
 
     // Setup header buttons

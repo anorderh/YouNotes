@@ -12,7 +12,6 @@ import StarterKit from '@tiptap/starter-kit';
 import { all, createLowlight } from 'lowlight';
 import collapseActionsHtml from '../../html/action-toggle/collapse-actions.html';
 import expandActionsHtml from '../../html/action-toggle/expand-actions.html';
-import redCircleHtml from '../../html/red-circle.html';
 import sidepanelHtml from '../../html/sidepanel.html';
 import copiedStatusHtml from '../../html/status-text/copied-status.html';
 import loadedStatusHtml from '../../html/status-text/loaded-status.html';
@@ -45,9 +44,10 @@ import {
     readVideoMetadata,
     uploadFile,
 } from '../util';
+import { SidepanelIndicator } from './indicator';
 import { SELECTORS } from './selectors';
 
-export function attachSidepanel(): void {
+export function attachSidepanel() {
     const video = document.querySelector(SELECTORS.YT.SELECTORS.VIDEO)!;
     const moviePlayer = document.getElementById('movie_player')!;
     const html5Video = getElementByClass(
@@ -58,7 +58,7 @@ export function attachSidepanel(): void {
     // Create container.
     const extContainer = document.createElement('div');
     extContainer.className = SELECTORS.EXT.CLASSES.EXT_CONTAINER;
-    injectContainer.insertBefore(extContainer, moviePlayer);
+    injectContainer.appendChild(extContainer);
 
     // Modify CSS of YT elements.
     moviePlayer.classList.add(SELECTORS.EXT.CLASSES.APPLIED_MOVIE_PLAYER);
@@ -76,9 +76,11 @@ export function attachSidepanel(): void {
     extContainer.appendChild(sidepanelHtmlElement);
 }
 
-export function loadImages(): void {
-    const extLogo = document.getElementById('ext-logo') as HTMLImageElement;
-    extLogo.src = chrome.runtime.getURL('images/younotes_logo_bw.png');
+export function loadImages() {
+    const sidepanelIndicator = document.getElementById(
+        'sidepanel-indicator',
+    ) as HTMLImageElement;
+    sidepanelIndicator.src = chrome.runtime.getURL('images/younotes_logo.png');
 }
 
 export async function setupSidepanelOpenClose(): Promise<void> {
@@ -93,7 +95,6 @@ export async function setupSidepanelOpenClose(): Promise<void> {
     const sidepanel = document.getElementById('sidepanel')!;
     const sidepanelContent = document.getElementById('sidepanel-content')!;
     const sidepanelBtn = document.getElementById('sidepanel-btn')!;
-    const sidepanelIcon = document.getElementById('sidepanel-icon')!;
     const handle = document.querySelector('.resize-handle')! as HTMLElement;
 
     // Auto hide functionality.
@@ -488,7 +489,9 @@ export async function setupSidepanelLoadAndSave(): Promise<void> {
     const editor = globals.editor!;
     const statusElement = document.getElementById('status')!;
     const sizeElement = document.getElementById('size-text')!;
-    const bottomRightBadge = document.getElementById('bottom-right-badge')!;
+    const sidepanelIndicator: HTMLImageElement = (document.getElementById(
+        'sidepanel-indicator',
+    ) as HTMLImageElement)!;
     let onUpdate: ({ editor }: { editor: Editor }) => Promise<void>;
     let savedUrl: string | null = null;
 
@@ -538,13 +541,13 @@ export async function setupSidepanelLoadAndSave(): Promise<void> {
 
                 // Existing html.
                 editor.chain().setContent(content, { emitUpdate: false }).run();
-                bottomRightBadge.innerHTML = redCircleHtml;
+                SidepanelIndicator.toggle(true);
                 statusElement.innerHTML = loadedStatusHtml;
                 sizeElement.innerHTML = getContentSize(content ?? '');
             } else {
                 // Empty html.
                 editor.chain().setContent('', { emitUpdate: false }).run();
-                bottomRightBadge.innerHTML = '';
+                SidepanelIndicator.toggle(false);
                 statusElement.innerHTML = 'Welcome to YouNotes!';
                 sizeElement.innerHTML = '0 B';
             }
@@ -580,7 +583,7 @@ export async function setupSidepanelLoadAndSave(): Promise<void> {
                             await chrome.storage.local.set({
                                 [contentKey!]: currContent,
                             });
-                            bottomRightBadge.innerHTML = redCircleHtml;
+                            SidepanelIndicator.toggle(true);
                             sizeElement.innerHTML = contentSize;
                         } else {
                             await chrome.storage.local.remove(contentKey!);
@@ -591,7 +594,7 @@ export async function setupSidepanelLoadAndSave(): Promise<void> {
                             //     url: location.href,
                             // } as ExtensionMessageDeleteRow);
 
-                            bottomRightBadge.innerHTML = '';
+                            SidepanelIndicator.toggle(false);
                             sizeElement.innerHTML = '0 B';
                         }
                         statusElement.innerHTML = savedStatusHtml;
@@ -1026,12 +1029,12 @@ export async function watchSidepanelChanges(): Promise<void> {
     const focusHotkey = document.getElementById('focus-key')!;
 
     // Setup logo click event.
-    const extLogo = document.getElementById('ext-logo')!;
-    extLogo.addEventListener('click', () => {
-        chrome.runtime.sendMessage({
-            action: 'openPopup',
-        });
-    });
+    // const extLogo = document.getElementById('ext-logo')!;
+    // extLogo.addEventListener('click', () => {
+    //     chrome.runtime.sendMessage({
+    //         action: 'openPopup',
+    //     });
+    // });
 
     // React to sidepanel container changes.
     let contentBuffer = document.getElementById('content-buffer')!;

@@ -15,16 +15,19 @@
         style="width: 350px; height: 550px"
         class="d-flex flex-column align-items-center p-2 dark-mode">
         <div id="popup-overlay" class="popup-overlay hidden">
-            <div id="dialog" class="dialog">
+            <div id="dialog" class="dialog overflow-auto">
                 <!-- Overlay -->
             </div>
         </div>
         <div
             id="buttons"
             class="w-100 d-flex flex-row justify-content-between gap-3">
-            <div class="d-flex flex-row">
-                <button id="info-btn" data-tooltip="About" class="icon-btn">
-                    <i class="fa-solid fa-info fa-xl"></i>
+            <div class="d-flex flex-row gap-3">
+                <button id="info-btn" data-tooltip="Info" class="icon-btn">
+                    <i class="fa-regular fa-info fa-lg"></i>
+                </button>
+                <button id="help-btn" data-tooltip="Help" class="icon-btn">
+                    <i class="fa-solid fa-question fa-lg"></i>
                 </button>
             </div>
             <div class="d-flex flex-row justify-content-end gap-3">
@@ -64,11 +67,11 @@
                 <!-- Grid content -->
             </div>
             <div class="w-100 d-flex flex-row justify-content-between align-items-center my-2">
-                <div data-tooltip-align="top" data-tooltip="Count" class="px-2 d-flex flex-row gap-4">
+                <div data-tooltip-align="top" data-tooltip="Count" class="px-2 d-flex flex-row gap-4 body-text">
                     <span id="video-interval"></span>
                     <span id="video-count"></span>
                 </div>
-                <div id="page-nav" class="d-flex flex-row align-items-center me-1 gap-2">
+                <div id="page-nav" class="d-flex flex-row align-items-center me-1 gap-2 body-text">
                     <button data-tooltip-align="top" data-tooltip="Previous page" class="icon-btn" id="prevPage">
                         <i class="fa-solid fa-angle-left fa-xl"></i>
                     </button>

@@ -27,7 +27,7 @@ type GlobalValuesType = {
 };
 
 export const globals: GlobalValuesType = {
-    version: '1.0.1',
+    version: '1.0.2',
     debug: false,
     width: {
         lowerLimit: null,
