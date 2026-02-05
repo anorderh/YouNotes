@@ -4,9 +4,14 @@ export function navigateToUrl(url: string) {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (!tabs[0]?.id) return;
 
-        chrome.tabs.update(tabs[0].id, {
-            url,
-        });
+        chrome.tabs
+            .update(tabs[0].id, {
+                url,
+            })
+            .then(() => {
+                // Close as navigation occurs
+                window.close();
+            });
     });
 }
 

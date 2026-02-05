@@ -53,11 +53,12 @@ export function attachSidepanel(): void {
     const html5Video = getElementByClass(
         SELECTORS.YT.CLASSES.HTML5_VIDEO_CONTAINER,
     )!;
+    const injectContainer = document.querySelector('#ytd-player #container')!;
 
     // Create container.
     const extContainer = document.createElement('div');
     extContainer.className = SELECTORS.EXT.CLASSES.EXT_CONTAINER;
-    moviePlayer.parentNode!.insertBefore(extContainer, moviePlayer);
+    injectContainer.insertBefore(extContainer, moviePlayer);
 
     // Modify CSS of YT elements.
     moviePlayer.classList.add(SELECTORS.EXT.CLASSES.APPLIED_MOVIE_PLAYER);
@@ -584,10 +585,11 @@ export async function setupSidepanelLoadAndSave(): Promise<void> {
                         } else {
                             await chrome.storage.local.remove(contentKey!);
                             await chrome.storage.local.remove(metadataKey!);
-                            await chrome.runtime.sendMessage({
-                                type: ExtensionMessageType.DELETE_ROW,
-                                url: location.href,
-                            } as ExtensionMessageDeleteRow);
+                            // Not needed, the Popup recalculates every render.
+                            // await chrome.runtime.sendMessage({
+                            //     type: ExtensionMessageType.DELETE_ROW,
+                            //     url: location.href,
+                            // } as ExtensionMessageDeleteRow);
 
                             bottomRightBadge.innerHTML = '';
                             sizeElement.innerHTML = '0 B';
@@ -1091,7 +1093,6 @@ export async function listenToPopup() {
                     case ExtensionMessageType.DELETE_ROW: {
                         const typed: ExtensionMessageDeleteRow =
                             message as ExtensionMessageDeleteRow;
-                        console.log('rannnnn');
                         if (location.href === typed.url) {
                             const editor = globals.editor!;
                             editor.commands.clearContent();

@@ -23,11 +23,22 @@ import {
         if (attached || document.querySelector('.ext-container')) return;
 
         // Skip if video element or movie player element not loaded yet.
-        if (
-            !document.querySelector(SELECTORS.YT.SELECTORS.VIDEO) ||
-            !document.getElementById(SELECTORS.YT.IDS.MOVIE_PLAYER)
-        )
+        const video = document.querySelector(SELECTORS.YT.SELECTORS.VIDEO);
+        const moviePlayer = document.getElementById(
+            SELECTORS.YT.IDS.MOVIE_PLAYER,
+        );
+        if (!video || !moviePlayer) {
             return;
+        }
+
+        // Skip if moviePlayer is currently being moved or is in player API.
+        // If the extension ever breaks, look here!
+        if (
+            moviePlayer?.parentNode == null ||
+            (moviePlayer.parentNode as HTMLElement).id == 'player-api'
+        ) {
+            return;
+        }
 
         // Mark extension as injected & stop listening.
         attached = true;

@@ -55,7 +55,6 @@ export async function getAllVideosMetadata(): Promise<VideoMetadata[]> {
     let metadataResult: { [key: string]: VideoMetadata } =
         await chrome.storage.local.get(metadataKeys);
     let metadata = Object.values(metadataResult);
-    console.log(metadata);
     return metadata;
 }
 

@@ -4,8 +4,8 @@ const { watch } = require('fs');
 const webpack = require('webpack');
 
 module.exports = {
-    // mode: 'development',
-    mode: 'production',
+    mode: 'development',
+    // mode: 'production',
     devtool: 'source-map', // No eval, to support webpack with Chrome
     entry: {
         sidepanel: './src/ts/sidepanel/index.ts',
