@@ -5,13 +5,17 @@ export class SidepanelIndicator {
         document.getElementById('sidepanel-indicator') as HTMLImageElement;
 
     static toggle(input: boolean) {
+        const indicator = this.indicator();
+        const icon = this.icon();
         requestAnimationFrame(() => {
-            if (input) {
-                this.indicator().style.filter = 'grayscale(0%)';
-                this.icon().style.filter = 'brightness(100%)';
-            } else {
-                this.indicator().style.filter = 'grayscale(100%)';
-                this.icon().style.filter = 'brightness(150%)';
+            if (indicator && icon) {
+                if (input) {
+                    indicator.style.filter = 'grayscale(0%)';
+                    icon.style.filter = 'brightness(100%)';
+                } else {
+                    indicator.style.filter = 'grayscale(100%)';
+                    icon.style.filter = 'brightness(150%)';
+                }
             }
         });
     }

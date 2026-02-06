@@ -104,7 +104,11 @@ p.is-editor-empty:first-child::before {
 }
 
 .tiptap {
-    font-size: 1.6rem !important;
+    font-size: 1.6rem;
+}
+
+.tiptap a {
+    font-size: unset;
 }
 
 a:-webkit-any-link:read-write {
