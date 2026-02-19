@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Version 1.0.3
+
+- Properly handle YT navigation events to avoid breaking player
+- Implement Discord btn
+- Tweak Help and Info modal content
+
 ## Version 1.0.2
 
 - Fixed injection issues where moviePlayer was held outside of DOM

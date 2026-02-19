@@ -1,7 +1,7 @@
 {
     "name": "YouNotes",
     "description": "Write and save notes on Youtube",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "manifest_version": 3,
     "action": {
         "default_popup": "html/popup.html"

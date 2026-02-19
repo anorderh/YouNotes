@@ -16,31 +16,57 @@ import {
 
 // Run code in asynchronous context.
 (async () => {
-    let attached = false;
-    // Watch webpage.
-    new MutationObserver(async (mutations, observe) => {
-        // Skip if attached or extension already injected.
-        if (attached || document.querySelector('.ext-container')) return;
+    const ytNavigateStartEvent = 'yt-navigate-start';
+    const ytNavigateFinishEvent = 'yt-navigate-finish';
 
-        // Skip if video element or movie player element not loaded yet.
-        const video = document.querySelector(SELECTORS.YT.SELECTORS.VIDEO);
+    let attached: boolean = false;
+    let navigating: boolean = false;
+
+    window.addEventListener(ytNavigateStartEvent, () => {
+        navigating = true;
+    });
+    window.addEventListener(ytNavigateFinishEvent, () => {
+        navigating = false;
+    });
+
+    new MutationObserver(async (mutations, observe) => {
+        const video: HTMLVideoElement = document.querySelector(
+            SELECTORS.YT.SELECTORS.VIDEO,
+        )!;
         const moviePlayer = document.getElementById(
             SELECTORS.YT.IDS.MOVIE_PLAYER,
-        );
-        if (!video || !moviePlayer) {
-            return;
-        }
+        )!;
+        const watchPage = document.querySelector(
+            SELECTORS.YT.SELECTORS.YTD_WATCH_PAGE,
+        )!;
+        const watchMetadata: HTMLElement = document.querySelector(
+            SELECTORS.YT.SELECTORS.YTD_WATCH_METADATA,
+        )!;
+        const videoRenderer = document.querySelector(
+            'ytd-video-primary-info-renderer',
+        )!;
 
-        // Skip if moviePlayer is currently being moved or is in player API.
-        // If the extension ever breaks, look here!
+        // Skip if...
         if (
+            // Youtube is still navigating
+            navigating ||
+            // Youtube HTML elements are not present.
+            !video ||
+            !moviePlayer ||
+            !watchMetadata ||
+            !videoRenderer ||
+            // Watch page is present.
+            watchPage?.role != 'main' ||
+            // Video is not ready.
+            video.readyState <= 3 ||
+            // Movie HTML elements are on the page, & not held by youtube-api.
             moviePlayer?.parentNode == null ||
-            (moviePlayer.parentNode as HTMLElement).id == 'player-api'
+            (moviePlayer.parentNode as HTMLElement).id != 'container'
         ) {
             return;
         }
 
-        // Mark extension as injected & stop listening.
+        // Mark as attached.
         attached = true;
         observe.disconnect();
 
@@ -56,7 +82,7 @@ import {
         await setupSidepanelHotkeys();
         await watchSidepanelChanges();
         await listenToPopup();
-    }).observe(document.body, {
+    }).observe(document, {
         childList: true,
         subtree: true,
     });

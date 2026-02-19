@@ -31,6 +31,8 @@ export const SELECTORS = {
         SELECTORS: {
             VIDEO: 'video',
             YTD_PLAYER: 'ytd-player',
+            YTD_WATCH_PAGE: 'ytd-watch-flexy',
+            YTD_WATCH_METADATA: 'ytd-watch-metadata',
         },
     },
 };

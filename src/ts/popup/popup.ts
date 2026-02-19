@@ -329,27 +329,12 @@ export async function setupPopupButtons() {
                         <span>YouNotes</span>
                     </span>
                     <span class="text-center">Version ${globals.version}</span>
-                    <span>This extension does not collect or transmit any personal data.</span>
-                    <div class="d-flex flex-column gap-1">
-                        <span class="fw-semibold">Chrome Web Store page:</span>
-                        <span style="overflow-wrap: anywhere;">https://chromewebstore.google.com/detail/gehcckelgmjikeplalgonkhdojacadmg</span>
-                    </div>
-                    <div class="d-flex flex-column gap-1">
-                        <span class="fw-semibold">Email Support:</span>
-                        <span>younotes.help@gmail.com</span>
-                    </div>
-                    <div class="d-flex flex-column gap-1">
-                        <span class="fw-semibold">Third Party Libraries:</span>
-                        <div>TipTap editor</div>
-                        <div>CodeMirror editor</div>
-                        <div>Lowlight syntax highlighting</div>
-                    </div>
+                    <span class="text-center">This extension does not collect or transmit any personal data.</span>
                     <div class="d-flex flex-column justify-content-center align-items-center gap-2">
                         <button id="license-btn" class="component text-btn clickable p-1 cursor-pointer">
                             Open Licenses
                         </button>
                     </div>
-                    <span class="text-center">Developed by <br/>Anthony Norderhaug &copy; 2026</span>
                 </div>
             `);
         // Setup license button.
@@ -372,7 +357,7 @@ export async function setupPopupButtons() {
                     <div class="w-100 d-flex flex-column align-items-center gap-3 py-2 pb-4 text-help">
                         <span class="fs-5 text-center fw-bold">What is this?</span>
                         <span class="w-100 text-center">
-                            <b>You<span class="text-yt">Notes</span></b> is a Chrome Extension for... you guessed it, <u>writing notes</u>! 
+                            <b>You<span class="text-yt">Notes</span></b> is a Chrome Extension for <u>writing notes on YouTube</u>! 
                         </span>
                         <span class="w-100">
                             You can access it by opening a <code>youtube.com/watch</code> URL, hovering over the video player, and pressing the button on the right-hand side.
@@ -532,10 +517,10 @@ export async function setupPopupButtons() {
             url: 'https://chromewebstore.google.com/detail/gehcckelgmjikeplalgonkhdojacadmg',
         });
     });
-    const emailBtn = document.getElementById('email-btn')!;
+    const emailBtn = document.getElementById('discord-btn')!;
     emailBtn.addEventListener('click', async () => {
         await chrome.tabs.create({
-            url: 'https://mail.google.com/mail/?view=cm&fs=1&to=younotes.help@gmail.com',
+            url: 'https://discord.gg/QwVdK3a8S3',
         });
     });
 }
