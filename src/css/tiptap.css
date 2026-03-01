@@ -63,11 +63,6 @@ p.is-editor-empty:first-child::before {
     margin-bottom: 1rem;
 } */
 
-.bs .tiptap * {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
 .bs .tiptap hr {
     border: none;
     border-top: 1px solid var(--fore-bg);
@@ -84,15 +79,6 @@ p.is-editor-empty:first-child::before {
 .bs .tiptap ul,
 .bs .tiptap ol {
     padding-left: 1.25em;
-}
-
-/* Optional but recommended */
-.bs .tiptap ul {
-    list-style: disc;
-}
-
-.bs .tiptap ol {
-    list-style: decimal;
 }
 
 .bs .tiptap blockquote {
@@ -130,7 +116,7 @@ a:-webkit-any-link:read-write {
 } */
 
 .bs .tiptap a {
-    color: #2d68c4;
+    color: #4da3ff;
     text-decoration: underline;
 }
 
@@ -365,11 +351,6 @@ a:-webkit-any-link:read-write {
         list-style: none;
         margin-left: 0;
         padding: 0;
-
-        .bs .tiptap * {
-            margin-top: 0rem !important;
-            margin-bottom: 0rem !important;
-        }
 
         li {
             display: flex;

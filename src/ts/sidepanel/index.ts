@@ -57,8 +57,8 @@ import {
             !videoRenderer ||
             // Watch page is present.
             watchPage?.role != 'main' ||
-            // Video is not ready.
-            video.readyState <= 3 ||
+            // // Video is not ready.
+            // video.readyState <= 3 ||
             // Movie HTML elements are on the page, & not held by youtube-api.
             moviePlayer?.parentNode == null ||
             (moviePlayer.parentNode as HTMLElement).id != 'container'

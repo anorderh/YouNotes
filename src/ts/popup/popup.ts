@@ -437,7 +437,7 @@ export async function setupPopupButtons() {
 
                             <div class="d-flex justify-content-between align-items-center">
                                 <span>Blockquote</span>
-                                <div class="hotkey-box">&gt;</div>
+                                <div class="hotkey-box">Ctrl+Shift+B</div>
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center">
@@ -483,6 +483,11 @@ export async function setupPopupButtons() {
                             <div class="d-flex justify-content-between align-items-center">
                                 <span>Highlight</span>
                                 <div class="hotkey-box">==[...]==</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Hyperlink</span>
+                                <div class="hotkey-box">Ctrl+K</div>
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center">

@@ -14,6 +14,7 @@ function showTooltip(element: HTMLElement) {
     let y: number = rect.bottom + 5;
 
     var tooltip = document.createElement('div');
+    tooltip.style.position = 'fixed';
     tooltip.className = 'tooltip';
     tooltip.innerHTML = text;
     if (hotkey != null) {

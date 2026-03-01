@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## Version 1.0.4
+
+- Decrease node padding
+- Add nested bullet styling
+- Modify URL color
+- Fix bug where tooltip position was incorrectly if scrolling while rendered
+- Increase priority of command manager
+- Hyperlink shortcut
+- Maintain indentation for paragraph
+- Add to popup instructions
+- Preserve whitespace when loading content
+- Horizontal scroll for toolbar
+
 ## Version 1.0.3
 
 - Properly handle YT navigation events to avoid breaking player

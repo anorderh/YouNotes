@@ -3,7 +3,7 @@ import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
 import { FileHandler } from '@tiptap/extension-file-handler';
 import Highlight from '@tiptap/extension-highlight';
 import { Image } from '@tiptap/extension-image';
-import { TaskItem, TaskList } from '@tiptap/extension-list';
+import { BulletList, TaskItem, TaskList } from '@tiptap/extension-list';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import { Placeholder } from '@tiptap/extensions';
@@ -19,6 +19,8 @@ import savedStatusHtml from '../../html/status-text/saved-status.html';
 import savingStatusHtml from '../../html/status-text/saving-status.html';
 import { globals } from '../global';
 import { MyCommandManager } from '../nodes/commands';
+import { LinkShortcut } from '../nodes/link-shortcut';
+import { ParagraphWithTab } from '../nodes/tab';
 import { Timestamp } from '../nodes/timestamp';
 import {
     ExtensionMessage,
@@ -274,6 +276,10 @@ export async function setupSidepanelEditor(): Promise<void> {
         element: target,
         extensions: [
             StarterKit.configure({
+                link: {
+                    defaultProtocol: 'https',
+                },
+                bulletList: false,
                 undoRedo: {
                     depth: 100,
                 },
@@ -282,7 +288,10 @@ export async function setupSidepanelEditor(): Promise<void> {
                 dropcursor: {
                     color: '#38383a',
                 },
+                paragraph: false,
             }),
+            BulletList,
+            ParagraphWithTab,
             TaskItem.configure({
                 nested: true,
             }),
@@ -446,6 +455,7 @@ export async function setupSidepanelEditor(): Promise<void> {
             }),
             Subscript,
             Superscript,
+            LinkShortcut,
         ],
         editorProps: {
             attributes: {
@@ -540,7 +550,15 @@ export async function setupSidepanelLoadAndSave(): Promise<void> {
                 }
 
                 // Existing html.
-                editor.chain().setContent(content, { emitUpdate: false }).run();
+                editor
+                    .chain()
+                    .setContent(content, {
+                        emitUpdate: false,
+                        parseOptions: {
+                            preserveWhitespace: true,
+                        },
+                    })
+                    .run();
                 SidepanelIndicator.toggle(true);
                 statusElement.innerHTML = loadedStatusHtml;
                 sizeElement.innerHTML = getContentSize(content ?? '');
@@ -706,6 +724,14 @@ export async function setupSidepanelMenubar(): Promise<void> {
 
     // Attach scrollfade.
     var menuBarContainer = document.getElementById('menu-bar-container')!;
+    // Horizontal scroll.
+    menuBarContainer.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        const scrollConstant = 30;
+        menuBarContainer.scrollBy({
+            left: event.deltaY < 0 ? -1 * scrollConstant : scrollConstant,
+        });
+    });
     attachScrollFade(menuBarContainer, {
         direction: 'horizontal',
         fadeSize: 24,
@@ -790,21 +816,38 @@ export async function setupSidepanelMenubar(): Promise<void> {
 
     // Link
     document.getElementById('menu-link')?.addEventListener('click', () => {
-        let url = prompt('Enter URL:');
+        const previousHref = editor.getAttributes('link').href;
+        let url = prompt('Enter URL:', previousHref ?? '');
         if (!url) return;
 
         url = url.trim();
-        // already has a scheme
-        if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)) {
-            if (url.startsWith('//')) {
-                // protocol-relative (//google.com)
-                url = window.location.protocol + url;
-            } else {
-                // assume https.
-                url = 'https://' + url;
-            }
+        if (!url) return;
+
+        editor.chain().focus().run();
+
+        const selection = editor.state.selection;
+        const hasSelection = selection && selection.from !== selection.to;
+
+        if (hasSelection) {
+            // If there is selected text, just set the link
+            editor.chain().setLink({ href: url }).run();
+        } else {
+            // No selection → insert the URL then make it a link
+            const { state } = editor;
+            const { from } = state.selection;
+
+            editor
+                .chain()
+                .insertContent(url)
+                .setTextSelection({ from, to: from + url.length })
+                .setLink({ href: url })
+                .setTextSelection(from + url.length)
+                .run();
+
+            // Move cursor to end of inserted link (so typing continues after it)
+            const posAfterLink = editor.state.selection.to;
+            editor.chain().focus(posAfterLink).run();
         }
-        editor.chain().focus().setLink({ href: url }).run();
     });
 
     // Clear formatting

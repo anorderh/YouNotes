@@ -12,6 +12,7 @@ export const MyCommandManager = Extension.create({
         };
     },
     name: 'commandManager',
+    priority: 1000,
     addKeyboardShortcuts() {
         return {
             Enter: () => {
