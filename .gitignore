@@ -2,3 +2,7 @@ node_modules/*
 package-lock.json
 dist/*
 .DS_Store
+releases
+releases/*
+node_modules
+dist

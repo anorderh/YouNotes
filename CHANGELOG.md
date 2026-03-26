@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version 1.0.5
+
+- Fixed scroll event conflicts between modern horizontal scrolls & traditional vertical
+    - Applicable for trackpad vs usb mouse
+
 ## Version 1.0.4
 
 - Decrease node padding

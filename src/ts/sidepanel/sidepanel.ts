@@ -724,18 +724,32 @@ export async function setupSidepanelMenubar(): Promise<void> {
 
     // Attach scrollfade.
     var menuBarContainer = document.getElementById('menu-bar-container')!;
-    // Horizontal scroll.
-    menuBarContainer.addEventListener('wheel', (event) => {
-        event.preventDefault();
-        const scrollConstant = 30;
-        menuBarContainer.scrollBy({
-            left: event.deltaY < 0 ? -1 * scrollConstant : scrollConstant,
-        });
-    });
     attachScrollFade(menuBarContainer, {
         direction: 'horizontal',
         fadeSize: 24,
     });
+
+    menuBarContainer.addEventListener(
+        'wheel',
+        (event) => {
+            if (event.shiftKey) return; // preserve native behavior
+            const isMostlyVertical =
+                Math.abs(event.deltaY) > Math.abs(event.deltaX);
+            if (!isMostlyVertical) return;
+            event.preventDefault();
+
+            let delta = event.deltaY;
+            if (event.deltaMode === 1) {
+                delta *= 16;
+            }
+
+            // clamp to avoid insane mouse spikes
+            const max = 80;
+            delta = Math.max(-max, Math.min(max, delta));
+            menuBarContainer.scrollLeft += delta;
+        },
+        { passive: false },
+    );
 
     // Helper to check if editor exists
     function safeCommand(fn: () => void) {
